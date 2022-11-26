@@ -89,7 +89,7 @@ public class FakeGameEngine implements IGameEngine {
         if (roundCount % 3 == 0)
             return List.of("farmland", "hamlet");
         else if (roundCount % 3 == 1)
-            return List.of("farmland", "farmland", "orchard");
+            return List.of("riftlands");
         return List.of("fishingvillage");
     }
 }
