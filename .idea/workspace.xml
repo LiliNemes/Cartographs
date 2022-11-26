@@ -2,41 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05f60589-a19f-4f6b-9781-e9ff81668056" name="Changes" comment="init commit">
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/PlayerSheetTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_BorderlandsTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_CanalLakeTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_GreatCityTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_GreenboughTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_GreengoldPlainsTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_MagesValleyTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Engine/Model/Sc_SentinelWoodTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cartographers.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Cartographers.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Builder/ArrangementRuleFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Builder/ArrangementRuleFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Builder/BoardDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Builder/BoardDeck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Builder/GameFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Builder/GameFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/ArrangementRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/ArrangementRule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/Coordinate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCardBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCardBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCardDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCardDeck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCardType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/DiscoveryCardType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/Layout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/Layout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/PlayerSheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/PlayerSheet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/PlayerTilesSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/PlayerTilesSelection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/ScoreCard.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/SelectedTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/SelectedTile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/TerrainType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/TerrainType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Engine/Model/ValidationResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Model/ValidationResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Engine/ArrangementRuleTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Engine/BoardTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Engine/LayoutTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Engine/PlayerTilesSelectionTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,7 +182,7 @@
       <workItem from="1669294661312" duration="23168000" />
       <workItem from="1669394683574" duration="7533000" />
       <workItem from="1669417348074" duration="9338000" />
-      <workItem from="1669481839629" duration="271000" />
+      <workItem from="1669481839629" duration="977000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <created>1668930075679</created>
@@ -238,7 +205,21 @@
       <option name="project" value="LOCAL" />
       <updated>1668963349498</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="init commit">
+      <created>1669482457002</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1669482457002</updated>
+    </task>
+    <task id="LOCAL-00005" summary="init commit">
+      <created>1669482574798</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1669482574798</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
