@@ -2,10 +2,19 @@ package Engine.Model;
 
 import java.util.List;
 
+/**
+ * A Treetower küldetéskártyát reprezentáló osztály.
+ */
 public class Sc_Treetower extends ScoreCardBase{
     public Sc_Treetower() {
+        super("Treetower");
     }
 
+    /**
+     * 1 pontot ad minden olyan erdő mezőért melynek szomszédságában nincs üres mező.
+     * @param sheet A pontozandó lap.
+     * @return A megszerzett pontok száma.
+     */
     @Override
     public int score(PlayerSheet sheet) {
         int points=0;

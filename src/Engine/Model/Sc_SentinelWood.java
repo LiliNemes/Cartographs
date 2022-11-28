@@ -6,6 +6,7 @@ package Engine.Model;
 public class Sc_SentinelWood extends ScoreCardBase{
 
     public Sc_SentinelWood() {
+        super("Sentinel Wood");
     }
 
     /**

@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Sc_GreatCity extends ScoreCardBase{
     public Sc_GreatCity() {
+        super("GreatCity");
     }
 
     /**

@@ -4,8 +4,8 @@ package Engine.Model;
  * A Canal Lake küldetéskártyát reprezentáló osztály.
  */
 public class Sc_CanalLake extends ScoreCardBase{
-
     public Sc_CanalLake() {
+        super("CanalLake");
     }
 
     /**

@@ -5,6 +5,7 @@ package Engine.Model;
  */
 public class Sc_Greenbough extends ScoreCardBase{
     public Sc_Greenbough() {
+        super("Greenbough");
     }
 
     /**

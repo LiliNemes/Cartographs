@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class Sc_MagesValley extends ScoreCardBase{
     public Sc_MagesValley() {
+        super("MagesValley");
     }
 
     /**

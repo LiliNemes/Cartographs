@@ -28,6 +28,10 @@ public class ImageBank {
     }
 
     public BufferedImage getByName(String name) {
-        return images.get(name);
+        String cleanedName = name.toLowerCase().replace(" ", "");
+        if (!images.containsKey(cleanedName)) {
+            return null;
+        }
+        return images.get(cleanedName);
     }
 }

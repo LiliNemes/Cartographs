@@ -75,10 +75,19 @@ public class GameFrame extends JFrame implements UserOkEventListener {
     private void showScoreCards() {
         this.scoreCardPanel.removeAll();
         double scale = 0.6;
+        /*this.scoreCardPanel.add(new JCard(this.cardImages, scale));
         this.scoreCardPanel.add(new JCard(this.cardImages, scale));
         this.scoreCardPanel.add(new JCard(this.cardImages, scale));
         this.scoreCardPanel.add(new JCard(this.cardImages, scale));
-        this.scoreCardPanel.add(new JCard(this.cardImages, scale));
+        */
+
+        var scoreCards = this.currentGame.getDrawnScoreCards();
+        for (int i=0; i<scoreCards.size(); i++) {
+            var drawnCard = new JCard(this.cardImages, scale);
+            drawnCard.setCardType(scoreCards.get(i));
+            this.scoreCardPanel.add(drawnCard);
+            drawnCard.getParent().setComponentZOrder(drawnCard, 0);
+        }
 
         this.scoreCardPanel.revalidate();
         this.scoreCardPanel.repaint();

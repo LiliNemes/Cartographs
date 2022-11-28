@@ -1,9 +1,19 @@
 package Engine.Model;
 
+/**
+ * A The Broken Road küldetéskártyát reprezentáló osztály.
+ */
 public class Sc_TheBrokenRoad extends ScoreCardBase{
+
     public Sc_TheBrokenRoad() {
+        super("TheBrokenRoad");
     }
 
+    /**
+     * Minden, a térkép bal szélét érintő, teljesen kitöltött átlóért 3 pontot ad.
+     * @param sheet Lepontozandó lap.
+     * @return A megszerzett pontok száma.
+     */
     @Override
     public int score(PlayerSheet sheet) {
         int points = 0;

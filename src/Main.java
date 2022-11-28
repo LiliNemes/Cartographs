@@ -29,7 +29,12 @@ public class Main {
                 "orchard",
                 "riftlands",
                 "sentinelwood",
-                "treetopvillage"));
+                "treetopvillage",
+                "shieldgate",
+                "thebrokenroad",
+                "thecauldrons",
+                "treetower",
+                "wildholds"));
         ImageBank otherImages = new ImageBank("", List.of( "scoreBlock"));
 
         GameFrame frame = new GameFrame("Game", tileImages, cardImages, otherImages);

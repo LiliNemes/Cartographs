@@ -13,7 +13,7 @@ public class PlayerTilesSelection {
     private static final List<TerrainType> VALID_TERRAIN_TYPES = List.of(TerrainType.Farm,
                                                                        TerrainType.Forest,
                                                                        TerrainType.Village,
-                                                                       TerrainType.Water);
+                                                                       TerrainType.Water, TerrainType.Monster);
 
     /**
      * Konstruktor.

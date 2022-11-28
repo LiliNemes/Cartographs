@@ -1,9 +1,18 @@
 package Engine.Model;
 
+/**
+ * A Shieldgate küldetéskártyát reprezentáló osztály.
+ */
 public class Sc_Shieldgate extends ScoreCardBase{
     public Sc_Shieldgate() {
+        super("Shieldgate");
     }
 
+    /**
+     * Két pontot kapsz a második legnagyobb összefóüggő falumeződ minden mezője után.
+     * @param sheet A pontozandó lap.
+     * @return A megszerzett pontok száma.
+     */
     @Override
     public int score(PlayerSheet sheet) {
         int points=0;

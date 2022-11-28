@@ -7,6 +7,7 @@ import Engine.Model.ValidationResult;
 import UI.IGameEngine;
 import UI.TileInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FakeGameEngine implements IGameEngine {
@@ -91,5 +92,15 @@ public class FakeGameEngine implements IGameEngine {
         else if (roundCount % 3 == 1)
             return List.of("riftlands");
         return List.of("fishingvillage");
+    }
+
+    @Override
+    public List<String> getDrawnScoreCards() {
+        List<String> names = new ArrayList<>();
+        names.add("Borderlands");
+        names.add("CanalLake");
+        names.add("GreatCity");
+        names.add("Greenbough");
+        return names;
     }
 }

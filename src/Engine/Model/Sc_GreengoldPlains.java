@@ -7,7 +7,9 @@ import java.util.List;
  *  A Greengold Plains küldetéskártyát reprezentáló osztály.
  */
 public class Sc_GreengoldPlains extends ScoreCardBase{
+
     public Sc_GreengoldPlains() {
+        super("GreengoldPlains");
     }
 
     /**

@@ -21,5 +21,6 @@ public interface IGameEngine extends IBoardInfo {
     int getGolds();
 
     List<String> getDrawnDiscoveryCards();
+     List<String> getDrawnScoreCards();
 }
 

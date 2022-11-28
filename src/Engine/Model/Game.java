@@ -107,6 +107,15 @@ public class Game implements IGameEngine {
         return names;
     }
 
+    public List<String> getDrawnScoreCards() {
+        List<String> names = new ArrayList<>();
+        names.add(this.scoreCards.get(Seasons.spring).get(0).getName());
+        names.add(this.scoreCards.get(Seasons.summer).get(0).getName());
+        names.add(this.scoreCards.get(Seasons.autumn).get(0).getName());
+        names.add(this.scoreCards.get(Seasons.winter).get(0).getName());
+        return names;
+    }
+
     public List<TerrainType> getPossibleTerrainTypes() {
 
         DiscoveryCard dc = (DiscoveryCard) this.discoveryCardsInPlay.get(this.discoveryCardsInPlay.size()-1);

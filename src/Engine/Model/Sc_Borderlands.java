@@ -4,8 +4,8 @@ package Engine.Model;
  * A Borderlands küldetéskártyát reprezentáló osztály.
  */
 public class Sc_Borderlands extends ScoreCardBase{
-
     public Sc_Borderlands() {
+        super("Borderlands");
     }
 
     /**

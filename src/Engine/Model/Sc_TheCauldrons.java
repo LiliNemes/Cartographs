@@ -2,11 +2,20 @@ package Engine.Model;
 
 import java.util.List;
 
+/**
+ * A TheCauldrons küldetéskártyát reprezentáló osztály.
+ */
 public class Sc_TheCauldrons extends ScoreCardBase{
 
     public Sc_TheCauldrons() {
+        super("TheCauldrons");
     }
 
+    /**
+     * Minden Olyan üres mezőért aminek nincs üres szomszédja 1 pont jár.
+     * @param sheet A pontozandó lap.
+     * @return A megszerzett pontok száma.
+     */
     @Override
     public int score(PlayerSheet sheet) {
         int points=0;

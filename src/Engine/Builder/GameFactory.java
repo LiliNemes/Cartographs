@@ -73,8 +73,7 @@ public class GameFactory {
         scoreCards.put(Seasons.summer, chosenCardsSummer);
         scoreCards.put(Seasons.autumn, chosenCardsAutumn);
         scoreCards.put(Seasons.winter, chosenCardsWinter);
-
-        return new Game(new PlayerSheet(playerName, BoardDeck.StandardBoard), discoveryCardDecks ,scoreCards, seasonTimes);
+        return new Game(new PlayerSheet(playerName, BoardDeck.createBoard()), discoveryCardDecks ,scoreCards, seasonTimes);
     }
 
 }
