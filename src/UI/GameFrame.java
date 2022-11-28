@@ -236,36 +236,23 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         }
         if(validationResult.isEndOfSeason()) {
             if(validationResult.getSeason()== Seasons.spring) {
-                int a= this.currentGame.getSeasonalScoreCards(Seasons.spring).get(0).score(this.currentGame.getCurrentSheet());
-                int b= this.currentGame.getSeasonalScoreCards(Seasons.spring).get(1).score(this.currentGame.getCurrentSheet());
-                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
-                showScores(0, a, b, money, 0);
+                showScores(0, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), 0);
                 new PopUpWindow("End of season! Accumulated points can be seen below.");
                 this.currentGame.setCurrentSeason(Seasons.summer);
 
             }
             if(validationResult.getSeason()== Seasons.summer) {
-                int a= this.currentGame.getSeasonalScoreCards(Seasons.summer).get(0).score(this.currentGame.getCurrentSheet());
-                int b= this.currentGame.getSeasonalScoreCards(Seasons.summer).get(1).score(this.currentGame.getCurrentSheet());
-                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
-                showScores(1, a, b, money, 0);
+                showScores(1, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), 0);
                 new PopUpWindow("End of season! Accumulated points can be seen below.");
                 this.currentGame.setCurrentSeason(Seasons.autumn);
             }
             if(validationResult.getSeason()== Seasons.autumn) {
-                int a= this.currentGame.getSeasonalScoreCards(Seasons.autumn).get(0).score(this.currentGame.getCurrentSheet());
-                int b= this.currentGame.getSeasonalScoreCards(Seasons.autumn).get(1).score(this.currentGame.getCurrentSheet());
-                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
-                showScores(2, a, b, money, 0);
+                showScores(2, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), 0);
                 new PopUpWindow("End of season! Accumulated points can be seen below.");
                 this.currentGame.setCurrentSeason(Seasons.winter);
             }
             if(validationResult.getSeason()== Seasons.winter) {
-                int a= this.currentGame.getSeasonalScoreCards(Seasons.winter).get(0).score(this.currentGame.getCurrentSheet());
-                int b= this.currentGame.getSeasonalScoreCards(Seasons.winter).get(1).score(this.currentGame.getCurrentSheet());
-                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
-                int id=3;
-                showScores(3, a, b, money, 0);
+                showScores(3, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), 0);
                 int finalScore=block1.getTotal()+block2.getTotal()+block3.getTotal()+block4.getTotal();
                 new PopUpWindow("End of the game! Your final score is " + finalScore + "You can start a new one in the main menu.");
             }

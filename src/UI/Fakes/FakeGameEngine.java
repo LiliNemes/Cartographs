@@ -41,7 +41,7 @@ public class FakeGameEngine implements IGameEngine {
             var selectedTile = selectedTiles.get(i);
             tiles[selectedTile.getX()][selectedTile.getY()].setTerrainType(selectedTile.getTerrainType());
         }
-        return new ExecutionSeasonResult(ValidationResult.Ok, false, currentSeason);
+        return new ExecutionSeasonResult(ValidationResult.Ok, false, -1, -1, -1, currentSeason);
     }
 
     private int roundCount = 0;

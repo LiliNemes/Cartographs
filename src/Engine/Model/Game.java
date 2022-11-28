@@ -86,7 +86,7 @@ public class Game implements IGameEngine {
         ValidationResult vr = this.currentSheet.execute(playerTilesSelection,(DiscoveryCard) this.discoveryCardsInPlay.get(i));
         //ha hiba akkor vissza hibával
         if(vr!=ValidationResult.Ok)
-            return new ExecutionSeasonResult(vr, false, this.currentSeason);
+            return new ExecutionSeasonResult(vr, false, -1, -1, -1, this.currentSeason);
         //ha jó
         //clear cards in play
         //current seasonhöz tartozó deck time-ja nagyobb e mint a season time
@@ -100,23 +100,31 @@ public class Game implements IGameEngine {
             }*/
             currentSheet.setScore(currentSheet.getAccumulatedGold());
             if(currentSeason==Seasons.winter) {
-                //TODO Game over
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
+                int a= this.getSeasonalScoreCards(Seasons.winter).get(0).score(this.getCurrentSheet());
+                int b= this.getSeasonalScoreCards(Seasons.winter).get(1).score(this.getCurrentSheet());
+                int money=this.getCurrentSheet().getAccumulatedGold();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
             }
             else if(currentSeason==Seasons.spring) {
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
-                //currentSeason=Seasons.summer;
+                int a= this.getSeasonalScoreCards(Seasons.spring).get(0).score(this.getCurrentSheet());
+                int b= this.getSeasonalScoreCards(Seasons.spring).get(1).score(this.getCurrentSheet());
+                int money=this.getCurrentSheet().getAccumulatedGold();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
             }
             else if(currentSeason==Seasons.summer) {
-                //currentSeason=Seasons.autumn;
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
+                int a= this.getSeasonalScoreCards(Seasons.summer).get(0).score(this.getCurrentSheet());
+                int b= this.getSeasonalScoreCards(Seasons.summer).get(1).score(this.getCurrentSheet());
+                int money=this.getCurrentSheet().getAccumulatedGold();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
             }
             else if(currentSeason==Seasons.autumn) {
-                //currentSeason = Seasons.winter;
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
+                int a= this.getSeasonalScoreCards(Seasons.autumn).get(0).score(this.getCurrentSheet());
+                int b= this.getSeasonalScoreCards(Seasons.autumn).get(1).score(this.getCurrentSheet());
+                int money=this.getCurrentSheet().getAccumulatedGold();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
             }
         }
-        return new ExecutionSeasonResult(ValidationResult.Ok, false, currentSeason);
+        return new ExecutionSeasonResult(ValidationResult.Ok, false, -1, -1, -1, currentSeason);
     }
 
     public List<String> getDrawnDiscoveryCards() {
