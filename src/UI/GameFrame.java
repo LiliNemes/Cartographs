@@ -40,11 +40,13 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.cardImages = cardImages;
         this.otherImages = otherImages;
         this.initFrame();
-        this.startGame(true);
+        this.startGame(false);
     }
 
     private void startGame(boolean isFake) {
-        this.currentGame = isFake ? new FakeGameEngine(11) : GameFactory.Instance.createSolitaireGame("Player");
+        PopUpWindow p =new PopUpWindow();
+        String name=p.getName();
+        this.currentGame = isFake ? new FakeGameEngine(11) : GameFactory.Instance.createSolitaireGame(name);
         this.board.setBoardInfo(this.currentGame);
         this.showScoreCards();
         this.drawCard();
@@ -52,11 +54,19 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.showCurrentSeason();
         this.createScores();
         this.showGold();
+
     }
 
     private void showCurrentSeason() {
         String info = String.format("Season: %s, Time:%s", this.currentGame.getCurrentSeason().name(), this.currentGame.getCurrentTime());
-        this.infoLabel.setText(info);
+        String name;
+        if(this.currentGame.getCurrentSheet().getName()==null) {
+            name= "null";
+        }
+        else {
+            name=this.currentGame.getCurrentSheet().getName();
+        }
+        this.infoLabel.setText(info + " Player: " + name);
     }
 
     private void showGold() {
@@ -222,7 +232,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         var sel = event.getPlayerTilesSelection();
         var validationResult = this.currentGame.executePlayerSelection(sel);
         if (validationResult.getVr() != ValidationResult.Ok) {
-
+            new PopUpWindow("Invalid selection of tiles! Please try again!");
         }
         if(validationResult.isEndOfSeason()) {
             if(validationResult.getSeason()== Seasons.spring) {
@@ -230,6 +240,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
                 int b= this.currentGame.getSeasonalScoreCards(Seasons.spring).get(1).score(this.currentGame.getCurrentSheet());
                 int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
                 showScores(0, a, b, money, 0);
+                new PopUpWindow("End of season! Accumulated points can be seen below.");
                 this.currentGame.setCurrentSeason(Seasons.summer);
 
             }
@@ -238,6 +249,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
                 int b= this.currentGame.getSeasonalScoreCards(Seasons.summer).get(1).score(this.currentGame.getCurrentSheet());
                 int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
                 showScores(1, a, b, money, 0);
+                new PopUpWindow("End of season! Accumulated points can be seen below.");
                 this.currentGame.setCurrentSeason(Seasons.autumn);
             }
             if(validationResult.getSeason()== Seasons.autumn) {
@@ -245,6 +257,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
                 int b= this.currentGame.getSeasonalScoreCards(Seasons.autumn).get(1).score(this.currentGame.getCurrentSheet());
                 int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
                 showScores(2, a, b, money, 0);
+                new PopUpWindow("End of season! Accumulated points can be seen below.");
                 this.currentGame.setCurrentSeason(Seasons.winter);
             }
             if(validationResult.getSeason()== Seasons.winter) {
@@ -253,9 +266,11 @@ public class GameFrame extends JFrame implements UserOkEventListener {
                 int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
                 int id=3;
                 showScores(3, a, b, money, 0);
+                int finalScore=block1.getTotal()+block2.getTotal()+block3.getTotal()+block4.getTotal();
+                new PopUpWindow("End of the game! Your final score is " + finalScore + "You can start a new one in the main menu.");
             }
         }
-        if(validationResult.getVr() == ValidationResult.Ok) {
+        if(validationResult.getVr() == ValidationResult.Ok && !(validationResult.isEndOfSeason() && validationResult.getSeason()==Seasons.winter)) {
             this.drawCard();
             this.showCurrentSeason();
             this.showDiscoveryCards();

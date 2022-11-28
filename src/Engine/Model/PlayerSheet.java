@@ -4,6 +4,10 @@ package Engine.Model;
  * Egy játékos pontozó- és játéklapját reprezentáló osztály.
  */
 public class PlayerSheet {
+    public String getName() {
+        return name;
+    }
+
     private String name;
     private Board board;
     private int accumulatedGold;

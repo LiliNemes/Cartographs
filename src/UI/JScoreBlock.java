@@ -16,6 +16,11 @@ public class JScoreBlock extends JPanel {
     private int scoreB;
     private int gold;
     private int monster;
+
+    public int getTotal() {
+        return total;
+    }
+
     private int total;
 
     @Override
