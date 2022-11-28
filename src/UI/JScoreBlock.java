@@ -14,6 +14,9 @@ public class JScoreBlock extends JPanel {
 
     private int scoreA;
     private int scoreB;
+    private int gold;
+    private int monster;
+    private int total;
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -21,17 +24,20 @@ public class JScoreBlock extends JPanel {
         super.paintComponent(g);
         Graphics2D gCopy = (Graphics2D)g.create();
         gCopy.drawRoundRect(margin,margin, this.getWidth()-margin*2, this.getHeight()-margin*2,10,10);
-        drawText(gCopy, "A:" + scoreA , 0,0);
-        drawText(gCopy, "B:" + scoreB, 0.5, 0);
-        drawText(gCopy, "G:10", 0, 0.333);
-        drawText(gCopy, "M:-20", 0.5, 0.333);
-        drawText(gCopy, "Total:566", 0.1, 0.666);
+        drawText(gCopy, "A: " + scoreA , 0,0);
+        drawText(gCopy, "B: " + scoreB, 0.5, 0);
+        drawText(gCopy, "G: " +gold, 0, 0.333);
+        drawText(gCopy, "M: " + -1*monster, 0.5, 0.333);
+        drawText(gCopy, "Total: " + total, 0.1, 0.666);
         gCopy.dispose();
     }
 
-    public void setScores(int scoreA, int scoreB) {
+    public void setScores(int scoreA, int scoreB, int money, int monster) {
         this.scoreA = scoreA;
         this.scoreB = scoreB;
+        this.gold = money;
+        this.monster=monster;
+        this.total=scoreA+scoreB+money+monster;
         this.revalidate();
         this.repaint();
     }

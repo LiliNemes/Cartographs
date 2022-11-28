@@ -13,11 +13,28 @@ import java.util.Stack;
  */
 public class Game implements IGameEngine {
 
+    public PlayerSheet getCurrentSheet() {
+        return currentSheet;
+    }
+
     private PlayerSheet currentSheet;
     private Map<Seasons, DiscoveryCardDeck> discoveryCardDecks;
+
+    public List<ScoreCardBase> getSeasonalScoreCards(Seasons s) {
+        List<ScoreCardBase> ret=new ArrayList<>();
+        ret.add(this.scoreCards.get(s).get(0));
+        ret.add(this.scoreCards.get(s).get(1));
+        return ret;
+    }
+
     private Map<Seasons, List<ScoreCardBase>> scoreCards;
 
     private Map<Seasons, Integer> seasonTimes;
+
+    public void setCurrentSeason(Seasons currentSeason) {
+        this.currentSeason = currentSeason;
+    }
+
     private Seasons currentSeason;
 
     private Stack<DiscoveryCardBase> discoveryCardsInPlay;
@@ -64,39 +81,42 @@ public class Game implements IGameEngine {
      */
 
     //TODO could not be tested :(
-    public ValidationResult executePlayerSelection(PlayerTilesSelection playerTilesSelection) {
+    public ExecutionSeasonResult executePlayerSelection(PlayerTilesSelection playerTilesSelection) {
         int i = this.discoveryCardsInPlay.size()-1;
         ValidationResult vr = this.currentSheet.execute(playerTilesSelection,(DiscoveryCard) this.discoveryCardsInPlay.get(i));
         //ha hiba akkor vissza hibával
         if(vr!=ValidationResult.Ok)
-            return vr;
+            return new ExecutionSeasonResult(vr, false, this.currentSeason);
         //ha jó
         //clear cards in play
         //current seasonhöz tartozó deck time-ja nagyobb e mint a season time
         //ha igen end of season (next seasn + score)
         this.discoveryCardsInPlay.clear();
         if(this.discoveryCardDecks.get(currentSeason).getTime()>=this.seasonTimes.get(currentSeason)) {
-            //score
+            /*score
             for (int j=0; j<scoreCards.get(currentSeason).size(); j++) {
                 int points=scoreCards.get(currentSeason).get(i).score(currentSheet);
                 currentSheet.setScore(points);
-            }
+            }*/
             currentSheet.setScore(currentSheet.getAccumulatedGold());
             if(currentSeason==Seasons.winter) {
                 //TODO Game over
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
             }
             else if(currentSeason==Seasons.spring) {
-                    currentSeason=Seasons.summer;
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
+                //currentSeason=Seasons.summer;
             }
             else if(currentSeason==Seasons.summer) {
-                    currentSeason=Seasons.autumn;
+                //currentSeason=Seasons.autumn;
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
             }
             else if(currentSeason==Seasons.autumn) {
-                currentSeason = Seasons.winter;
+                //currentSeason = Seasons.winter;
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, currentSeason);
             }
         }
-        return ValidationResult.Ok;
-
+        return new ExecutionSeasonResult(ValidationResult.Ok, false, currentSeason);
     }
 
     public List<String> getDrawnDiscoveryCards() {

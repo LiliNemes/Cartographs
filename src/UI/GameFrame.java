@@ -1,6 +1,8 @@
 package UI;
 
 import Engine.Builder.GameFactory;
+import Engine.Model.ExecutionSeasonResult;
+import Engine.Model.Seasons;
 import Engine.Model.ValidationResult;
 import UI.Fakes.FakeGameEngine;
 
@@ -16,6 +18,10 @@ public class GameFrame extends JFrame implements UserOkEventListener {
 
     private JBoard board;
     private JPanel scoreArea;
+    private JScoreBlock block1;
+    private JScoreBlock block2;
+    private JScoreBlock block3;
+    private JScoreBlock block4;
 
     private JPanel mainPanel;
     private JPanel rightPanel;
@@ -44,7 +50,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.drawCard();
         this.showDiscoveryCards();
         this.showCurrentSeason();
-        this.showScores();
+        this.createScores();
         this.showGold();
     }
 
@@ -58,15 +64,34 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.goldLabel.setText(String.format("Gold:%s", golds));
     }
 
-    private void showScores() {
+    private void createScores() {
         this.scoreArea.removeAll();
 
-        JScoreBlock block1 = new JScoreBlock();
-        block1.setScores(11, 22);
+        block1 = new JScoreBlock();
         this.scoreArea.add(block1);
-        this.scoreArea.add(new JScoreBlock());
-        this.scoreArea.add(new JScoreBlock());
-        this.scoreArea.add(new JScoreBlock());
+        block2 = new JScoreBlock();
+        this.scoreArea.add(block2);
+        block3 = new JScoreBlock();
+        this.scoreArea.add(block3);
+        block4 = new JScoreBlock();
+        this.scoreArea.add(block4);
+
+        this.scoreArea.revalidate();
+        this.scoreArea.repaint();
+    }
+    private void showScores(int id, int a, int b, int gold, int monster) {
+        if(id==0) {
+           block1.setScores(a,b,gold, monster);
+        }
+        if(id==1) {
+            block2.setScores(a, b, gold, monster);
+        }
+        if(id==2) {
+            block3.setScores(a, b, gold, monster);
+        }
+        if(id==3) {
+            block4.setScores(a, b, gold, monster);
+        }
 
         this.scoreArea.revalidate();
         this.scoreArea.repaint();
@@ -86,7 +111,6 @@ public class GameFrame extends JFrame implements UserOkEventListener {
             var drawnCard = new JCard(this.cardImages, scale);
             drawnCard.setCardType(scoreCards.get(i));
             this.scoreCardPanel.add(drawnCard);
-            drawnCard.getParent().setComponentZOrder(drawnCard, 0);
         }
 
         this.scoreCardPanel.revalidate();
@@ -197,15 +221,46 @@ public class GameFrame extends JFrame implements UserOkEventListener {
     public void userOkEventOccurred(UserOkEvent event) {
         var sel = event.getPlayerTilesSelection();
         var validationResult = this.currentGame.executePlayerSelection(sel);
-        if (validationResult != ValidationResult.Ok) {
+        if (validationResult.getVr() != ValidationResult.Ok) {
 
         }
-        else {
+        if(validationResult.isEndOfSeason()) {
+            if(validationResult.getSeason()== Seasons.spring) {
+                int a= this.currentGame.getSeasonalScoreCards(Seasons.spring).get(0).score(this.currentGame.getCurrentSheet());
+                int b= this.currentGame.getSeasonalScoreCards(Seasons.spring).get(1).score(this.currentGame.getCurrentSheet());
+                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
+                showScores(0, a, b, money, 0);
+                this.currentGame.setCurrentSeason(Seasons.summer);
+
+            }
+            if(validationResult.getSeason()== Seasons.summer) {
+                int a= this.currentGame.getSeasonalScoreCards(Seasons.summer).get(0).score(this.currentGame.getCurrentSheet());
+                int b= this.currentGame.getSeasonalScoreCards(Seasons.summer).get(1).score(this.currentGame.getCurrentSheet());
+                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
+                showScores(1, a, b, money, 0);
+                this.currentGame.setCurrentSeason(Seasons.autumn);
+            }
+            if(validationResult.getSeason()== Seasons.autumn) {
+                int a= this.currentGame.getSeasonalScoreCards(Seasons.autumn).get(0).score(this.currentGame.getCurrentSheet());
+                int b= this.currentGame.getSeasonalScoreCards(Seasons.autumn).get(1).score(this.currentGame.getCurrentSheet());
+                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
+                showScores(2, a, b, money, 0);
+                this.currentGame.setCurrentSeason(Seasons.winter);
+            }
+            if(validationResult.getSeason()== Seasons.winter) {
+                int a= this.currentGame.getSeasonalScoreCards(Seasons.winter).get(0).score(this.currentGame.getCurrentSheet());
+                int b= this.currentGame.getSeasonalScoreCards(Seasons.winter).get(1).score(this.currentGame.getCurrentSheet());
+                int money=this.currentGame.getCurrentSheet().getAccumulatedGold();
+                int id=3;
+                showScores(3, a, b, money, 0);
+            }
+        }
+        if(validationResult.getVr() == ValidationResult.Ok) {
             this.drawCard();
             this.showCurrentSeason();
             this.showDiscoveryCards();
-            this.showScores();
             this.showGold();
         }
+
     }
 }

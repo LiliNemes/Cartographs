@@ -1,14 +1,11 @@
 package UI;
 
-import Engine.Model.PlayerTilesSelection;
-import Engine.Model.Seasons;
-import Engine.Model.TerrainType;
-import Engine.Model.ValidationResult;
+import Engine.Model.*;
 
 import java.util.List;
 
 public interface IGameEngine extends IBoardInfo {
-    ValidationResult executePlayerSelection(PlayerTilesSelection selection);
+    ExecutionSeasonResult executePlayerSelection(PlayerTilesSelection selection);
 
     void drawNextCard();
 
@@ -21,6 +18,9 @@ public interface IGameEngine extends IBoardInfo {
     int getGolds();
 
     List<String> getDrawnDiscoveryCards();
-     List<String> getDrawnScoreCards();
+    List<String> getDrawnScoreCards();
+    List<ScoreCardBase> getSeasonalScoreCards(Seasons s);
+    PlayerSheet getCurrentSheet();
+    void setCurrentSeason(Seasons currentSeason);
 }
 

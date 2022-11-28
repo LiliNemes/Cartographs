@@ -1,9 +1,6 @@
 package UI.Fakes;
 
-import Engine.Model.PlayerTilesSelection;
-import Engine.Model.Seasons;
-import Engine.Model.TerrainType;
-import Engine.Model.ValidationResult;
+import Engine.Model.*;
 import UI.IGameEngine;
 import UI.TileInfo;
 
@@ -38,13 +35,13 @@ public class FakeGameEngine implements IGameEngine {
     }
 
     @Override
-    public ValidationResult executePlayerSelection(PlayerTilesSelection selection) {
+    public ExecutionSeasonResult executePlayerSelection(PlayerTilesSelection selection) {
         var selectedTiles = selection.getSelectedTiles();
         for (int i=0; i<selectedTiles.size();i ++) {
             var selectedTile = selectedTiles.get(i);
             tiles[selectedTile.getX()][selectedTile.getY()].setTerrainType(selectedTile.getTerrainType());
         }
-        return ValidationResult.Ok;
+        return new ExecutionSeasonResult(ValidationResult.Ok, false, currentSeason);
     }
 
     private int roundCount = 0;
@@ -102,5 +99,20 @@ public class FakeGameEngine implements IGameEngine {
         names.add("GreatCity");
         names.add("Greenbough");
         return names;
+    }
+
+    @Override
+    public List<ScoreCardBase> getSeasonalScoreCards(Seasons s) {
+        return null;
+    }
+
+    @Override
+    public PlayerSheet getCurrentSheet() {
+        return null;
+    }
+
+    @Override
+    public void setCurrentSeason(Seasons currentSeason) {
+
     }
 }
