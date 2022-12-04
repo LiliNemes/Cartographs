@@ -26,7 +26,7 @@ public class Sc_CanalLakeTest {
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(0, 2, TerrainType.Water);
         ps.addTile(2,2, TerrainType.Farm);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = canallake.score(sheet);
         Assert.assertEquals(3, actual);
@@ -42,7 +42,7 @@ public class Sc_CanalLakeTest {
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(0, 2, TerrainType.Water);
         ps.addTile(2,2, TerrainType.Farm);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = canallake.score(sheet);
         Assert.assertEquals(0, actual);

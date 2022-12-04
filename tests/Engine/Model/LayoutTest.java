@@ -1,5 +1,6 @@
 package Engine.Model;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -124,4 +125,19 @@ public class LayoutTest {
         assertTrue(result.isMatch(expected));
     }
 
+    @Test
+    public void testSurrounding1() {
+        var input = Layout.createLayout("0,0;0,1;0,2");
+        var result = input.surroundings();
+        var expected = Layout.createLayout("0,-1;-1,0;-1,1;-1,2;0,3;1,0;1,1;1,2");
+        Assert.assertTrue(result.isMatch(expected));
+    }
+
+    @Test
+    public void testSurrounding2() {
+        var input = Layout.createLayout("0,0;1,0;2,0");
+        var result = input.surroundings();
+        var expected = Layout.createLayout("-1,0;0,-1;1,-1;2,-1;3,0;0,1;1,1;2,1");
+        Assert.assertTrue(result.isMatch(expected));
+    }
 }

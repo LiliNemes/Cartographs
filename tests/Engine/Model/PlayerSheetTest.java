@@ -10,7 +10,7 @@ public class PlayerSheetTest {
 
     @Before
     public void init() {
-        DiscoveryCardDeck.createDeck(false);
+        DiscoveryCardDeck.createDeck();
         ps=new PlayerTilesSelection();
         Board b=new Board(5, Coordinate.parseList("1,1"), Coordinate.parseList("1,1"));
         sheet =new PlayerSheet("Lili", b);
@@ -26,7 +26,7 @@ public class PlayerSheetTest {
         ps.addTile(1, 0, TerrainType.Forest);
         ps.addTile(2, 1, TerrainType.Forest);
         ValidationResult expected=ValidationResult.Ok;
-        Assert.assertEquals(expected, sheet.check(ps, forgottenForest));
+        Assert.assertEquals(expected, sheet.check(ps, forgottenForest, false));
     }
 
     /**
@@ -39,7 +39,7 @@ public class PlayerSheetTest {
         ps.addTile(1, 0, TerrainType.Water);
         ps.addTile(2, 1, TerrainType.Water);
         ValidationResult expected = ValidationResult.InvalidTerrain;
-        Assert.assertEquals(expected, sheet.check(ps, forgottenForest));
+        Assert.assertEquals(expected, sheet.check(ps, forgottenForest, false));
     }
 
     /**
@@ -52,7 +52,7 @@ public class PlayerSheetTest {
         ps.addTile(1, 1, TerrainType.Forest);
         ps.addTile(2, 2, TerrainType.Forest);
         ValidationResult expected = ValidationResult.TileNotEmpty;
-        Assert.assertEquals(expected, sheet.check(ps, forgottenForest));
+        Assert.assertEquals(expected, sheet.check(ps, forgottenForest, false));
     }
 
     /**
@@ -60,12 +60,12 @@ public class PlayerSheetTest {
      * @throws Exception ha rossz kitöltés.
      */
     @Test
-    public void forgottenForestexecuteOKGold() throws Exception {
+    public void forgottenForestexecuteOKGold() {
         DiscoveryCard forgottenForest=DiscoveryCardDeck.ForgottenForest;
         ps.addTile(0, 1, TerrainType.Forest);
         ps.addTile(1, 2, TerrainType.Forest);
         ValidationResult expected = ValidationResult.Ok;
-        Assert.assertEquals(expected, sheet.execute(ps, forgottenForest));
+        Assert.assertEquals(expected, sheet.execute(ps, forgottenForest, false));
         Assert.assertEquals(1, sheet.getAccumulatedGold());
     }
 
@@ -74,14 +74,14 @@ public class PlayerSheetTest {
      * @throws Exception ha rossz kitöltés.s
      */
     @Test
-    public void forgottenForestExecuteNoGold() throws Exception {
+    public void forgottenForestExecuteNoGold() {
         DiscoveryCard forgottenForest=DiscoveryCardDeck.ForgottenForest;
         ps.addTile(4, 4, TerrainType.Forest);
         ps.addTile(4, 3, TerrainType.Forest);
         ps.addTile(3, 3, TerrainType.Forest);
         ps.addTile(3, 2, TerrainType.Forest);
         ValidationResult expected = ValidationResult.Ok;
-        Assert.assertEquals(expected, sheet.execute(ps, forgottenForest));
+        Assert.assertEquals(expected, sheet.execute(ps, forgottenForest, false));
         Assert.assertEquals(0, sheet.getAccumulatedGold());
     }
 

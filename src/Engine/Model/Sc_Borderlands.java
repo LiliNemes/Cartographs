@@ -5,7 +5,10 @@ package Engine.Model;
  */
 public class Sc_Borderlands extends ScoreCardBase{
     public Sc_Borderlands() {
-        super("Borderlands");
+        super("Borderlands", "Earn six \n" +
+                "reputation stars for each \n" +
+                "complete row or complete \n" +
+                "column of filled spaces.");
     }
 
     /**

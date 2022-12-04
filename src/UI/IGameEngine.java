@@ -7,7 +7,8 @@ import java.util.List;
 public interface IGameEngine extends IBoardInfo {
     ExecutionSeasonResult executePlayerSelection(PlayerTilesSelection selection);
 
-    void drawNextCard();
+    //returns playerTilesSelection in case of monster ambush
+    PlayerTilesSelection drawNextCard();
 
     List<TerrainType> getPossibleTerrainTypes();
 
@@ -18,9 +19,9 @@ public interface IGameEngine extends IBoardInfo {
     int getGolds();
 
     List<String> getDrawnDiscoveryCards();
-    List<String> getDrawnScoreCards();
+    List<ScoreCardInfo> getDrawnScoreCards();
     List<ScoreCardBase> getSeasonalScoreCards(Seasons s);
-    PlayerSheet getCurrentSheet();
     void setCurrentSeason(Seasons currentSeason);
+    String getPlayerName();
 }
 

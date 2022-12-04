@@ -29,7 +29,7 @@ public class Sc_WildholdsTest {
         ps.addTile(1, 2, TerrainType.Village);
         ps.addTile(2, 0, TerrainType.Forest);
         ps.addTile(2, 1, TerrainType.Village);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = wildholds.score(sheet);
         Assert.assertEquals(8, actual);
@@ -47,7 +47,7 @@ public class Sc_WildholdsTest {
         ps.addTile(2,2, TerrainType.Village);
         ps.addTile(1, 2, TerrainType.Village);
         ps.addTile(2, 0, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = wildholds.score(sheet);
         Assert.assertEquals(0, actual);

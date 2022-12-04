@@ -6,7 +6,11 @@ package Engine.Model;
 public class Sc_TheBrokenRoad extends ScoreCardBase{
 
     public Sc_TheBrokenRoad() {
-        super("TheBrokenRoad");
+        super("TheBrokenRoad", " Earn three \n" +
+                "reputation stars for each \n" +
+                "complete diagonal line of filled \n" +
+                "spaces that touches the left and \n" +
+                "bottom edges of the map.");
     }
 
     /**
@@ -18,10 +22,10 @@ public class Sc_TheBrokenRoad extends ScoreCardBase{
     public int score(PlayerSheet sheet) {
         int points = 0;
         Board b=sheet.getBoard();
-        for(int i=0; i<b.boardSize; i++) {
+        for(int i=0; i<b.getBoardSize(); i++) {
             boolean isfull=true;
             int horizontal=0;
-            for(int j=i; j< b.boardSize; j++) {
+            for(int j=i; j< b.getBoardSize(); j++) {
                 Coordinate c=new Coordinate(horizontal,j);
                 if(b.getTerrainType(c)==TerrainType.Empty) {
                     isfull=false;

@@ -30,7 +30,7 @@ public class Sc_GreengoldPlainsTest {
         ps.addTile(2,1, TerrainType.Village);
         ps.addTile(2, 0, TerrainType.Water);
         ps.addTile(1, 2, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = greengoldPlains.score(sheet);
         Assert.assertEquals(6, actual);
@@ -49,7 +49,7 @@ public class Sc_GreengoldPlainsTest {
         ps.addTile(2,2, TerrainType.Village);
         ps.addTile(2,1, TerrainType.Village);
         ps.addTile(1, 2, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = greengoldPlains.score(sheet);
         Assert.assertEquals(0, actual);

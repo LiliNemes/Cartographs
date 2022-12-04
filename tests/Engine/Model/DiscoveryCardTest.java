@@ -8,7 +8,7 @@ public class DiscoveryCardTest {
 
     @Before
     public void init() {
-        DiscoveryCardDeck.createDeck(false);
+        DiscoveryCardDeck.createDeck();
     }
 
     /**

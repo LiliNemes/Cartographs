@@ -1,13 +1,24 @@
 package Engine.Model;
 
-public class ScoreCardBase {
+import java.io.Serializable;
+
+public class ScoreCardBase implements Serializable {
     private String name;
-    public ScoreCardBase(String s) {name=s;}
+    private String description;
+    public ScoreCardBase(String s, String desc) {
+        name=s;
+        description=desc;
+    }
+
     public int score(PlayerSheet sheet) {
         return 74;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

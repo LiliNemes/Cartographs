@@ -25,7 +25,7 @@ public class Sc_SentinelWoodTest {
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Forest);
         ps.addTile(0, 2, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = sentinelWood.score(sheet);
         Assert.assertEquals(2, actual);
@@ -40,7 +40,7 @@ public class Sc_SentinelWoodTest {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Water);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = sentinelWood.score(sheet);
         Assert.assertEquals(0, actual);

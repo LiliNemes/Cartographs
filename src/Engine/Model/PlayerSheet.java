@@ -1,9 +1,11 @@
 package Engine.Model;
 
+import java.io.Serializable;
+
 /**
  * Egy játékos pontozó- és játéklapját reprezentáló osztály.
  */
-public class PlayerSheet {
+public class PlayerSheet implements Serializable {
     public String getName() {
         return name;
     }
@@ -47,10 +49,31 @@ public class PlayerSheet {
      * @param currentDiscoveryCard Az éppen játékban lévő felfedezőjkártya.
      * @return ValidationResult, Ok ha minden rendben, ha nem akkor speciális, a problémára vonatkozó.
      */
-    public ValidationResult check(PlayerTilesSelection playerTilesSelection, DiscoveryCard currentDiscoveryCard) {
-        ValidationResult one = currentDiscoveryCard.check(playerTilesSelection);
-        boolean yieldsGold=currentDiscoveryCard.yieldsGold(playerTilesSelection);
-        ValidationResult two = this.board.check(playerTilesSelection,yieldsGold);
+    public ValidationResult check(PlayerTilesSelection playerTilesSelection, DiscoveryCard currentDiscoveryCard, boolean isThereRuinCard) {
+
+        boolean specialDiscoveryCardValidation = false;
+        if (isThereRuinCard) {
+            if (!this.board.isOnRuin(playerTilesSelection))
+            {
+                if (canBePlacedOnRuin(currentDiscoveryCard))
+                    return ValidationResult.MustPutOnRuin;
+                // cannot place on ruin must place a single tile
+                specialDiscoveryCardValidation = true;
+            }
+        }
+
+        if (!canBePlaced(currentDiscoveryCard))
+            specialDiscoveryCardValidation = true;
+
+        ValidationResult one;
+        if (specialDiscoveryCardValidation) {
+            one = currentDiscoveryCard.specialCheck(playerTilesSelection);
+        }
+        else {
+            one = currentDiscoveryCard.check(playerTilesSelection);
+        }
+
+        ValidationResult two = this.board.check(playerTilesSelection);
         if (one==ValidationResult.Ok && two==ValidationResult.Ok)
             return ValidationResult.Ok;
         if(one!=ValidationResult.Ok)
@@ -58,17 +81,51 @@ public class PlayerSheet {
         return two;
     }
 
+    private boolean canBePlacedOnRuin(DiscoveryCard discoveryCard) {
+
+        if (!this.board.areThereFreeRuinTiles())
+            return false;
+
+        var layouts = discoveryCard.getAllLayouts();
+        for (int i=0; i<layouts.size(); i++) {
+            if (this.board.canBePlacedOnRuin(layouts.get(i)))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean canBePlaced(DiscoveryCard discoveryCard) {
+
+        var layouts = discoveryCard.getAllLayouts();
+        for (int i=0; i<layouts.size(); i++) {
+            if (this.board.canBePlaced(layouts.get(i)))
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Ha a check ValidationResult.Ok-ot ad vissza, végrehajtja a lépést.
      * @param playerTilesSelection A játékos által kiválasztott mezők.
-     * @param currentDiscoveryCard A játékban lévő felfedezőkártya.
+     * @param currentCard A játékban lévő felfedezőkártya.
      * @return ValidationResult.Ok ha sikeres, ha nem akkor más ValidationResult.
      */
-    public ValidationResult execute(PlayerTilesSelection playerTilesSelection, DiscoveryCard currentDiscoveryCard) {
-        ValidationResult vr = check(playerTilesSelection, currentDiscoveryCard);
+    public ValidationResult execute(PlayerTilesSelection playerTilesSelection, DiscoveryCardBase currentCard, boolean isThereRuinCard) {
+
+        if (currentCard.getCardType() == DiscoveryCardType.Ambush) {
+            this.board.executeAmbush(playerTilesSelection);
+            return ValidationResult.Ok;
+        }
+
+        if (playerTilesSelection.getSelectedTiles().size() == 0) {
+            return ValidationResult.NoSelection;
+        }
+
+        var currentDiscoveryCard = (DiscoveryCard)currentCard;
+        ValidationResult vr = check(playerTilesSelection, currentDiscoveryCard, isThereRuinCard);
         if(vr!=ValidationResult.Ok)
             return vr;
-        ExecutionResult er = this.board.execute(playerTilesSelection, false);
+        ExecutionResult er = this.board.execute(playerTilesSelection);
         if(er.getResult()!=ValidationResult.Ok)
             return er.getResult();
         this.accumulatedGold+=er.getGoldYield();
@@ -82,6 +139,10 @@ public class PlayerSheet {
      * @return A játékos által összegyűjtött aranyak.
      */
     public int getAccumulatedGold() {
-        return accumulatedGold;
+        return this.accumulatedGold;
+    }
+
+    public int getMonsterPoints() {
+        return this.board.getMonsterPoints() * -1;
     }
 }

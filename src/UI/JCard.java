@@ -18,8 +18,10 @@ public class JCard extends JPanel {
         this.cardType = "discovery_back";
     }
 
-    public void setCardType(String cardType) {
+    public void setCardType(String cardType, String tooltip) {
         this.cardType = cardType;
+        String tooltipHtml = tooltip != null ? "<html>" + tooltip.replaceAll("(\r\n|\n)", "<br />") + "</html>" : null;
+        this.setToolTipText(tooltipHtml);
         this.revalidate();
         this.repaint();
     }

@@ -9,7 +9,11 @@ import java.util.List;
 public class Sc_GreengoldPlains extends ScoreCardBase{
 
     public Sc_GreengoldPlains() {
-        super("GreengoldPlains");
+        super("GreengoldPlains", "Earn three \n" +
+                "reputation stars for each \n" +
+                "cluster of villages spaces that \n" +
+                "is adjacent to three or more \n" +
+                "different terrain types.");
     }
 
     /**

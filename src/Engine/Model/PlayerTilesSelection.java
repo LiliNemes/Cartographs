@@ -36,9 +36,9 @@ public class PlayerTilesSelection {
      * @param terrainType Az új mező kiválasztott kitöltési értéke.
      * @throws Exception
      */
-    public void addTile(int x, int y, TerrainType terrainType) throws Exception {
+    public void addTile(int x, int y, TerrainType terrainType) {
         if (!VALID_TERRAIN_TYPES.contains(terrainType)) {
-            throw new Exception("Selected terrain type is not valid.");
+            throw new RuntimeException("Selected terrain type is not valid.");
         }
         var tile = GetTileByCoordinates(x, y);
         if (tile != null) {

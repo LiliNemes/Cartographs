@@ -28,11 +28,13 @@ public class JScoreBlock extends JPanel {
 
         super.paintComponent(g);
         Graphics2D gCopy = (Graphics2D)g.create();
-        gCopy.drawRoundRect(margin,margin, this.getWidth()-margin*2, this.getHeight()-margin*2,10,10);
+        gCopy.setColor(Color.LIGHT_GRAY);
+        gCopy.fillRoundRect(margin,margin, this.getWidth()-margin*2, this.getHeight()-margin*2,10,10);
+        gCopy.setColor(Color.BLACK);
         drawText(gCopy, "A: " + scoreA , 0,0);
         drawText(gCopy, "B: " + scoreB, 0.5, 0);
         drawText(gCopy, "G: " +gold, 0, 0.333);
-        drawText(gCopy, "M: " + -1*monster, 0.5, 0.333);
+        drawText(gCopy, "M: " + monster, 0.5, 0.333);
         drawText(gCopy, "Total: " + total, 0.1, 0.666);
         gCopy.dispose();
     }

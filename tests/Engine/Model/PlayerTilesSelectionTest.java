@@ -30,9 +30,9 @@ public class PlayerTilesSelectionTest {
      * Mező hozzáadása invalid kitöltéssel.
      * @throws Exception ha nem jó a típus.
      */
-    @Test(expected = Exception.class)
-    public void invalidTerrainTypeThrowsException() throws Exception {
-        selection.addTile(1, 1, TerrainType.Monster);
+    @Test(expected = RuntimeException.class)
+    public void invalidTerrainTypeThrowsException() {
+        selection.addTile(1, 1, TerrainType.Mountain);
     }
 
     /**

@@ -9,6 +9,8 @@ public enum ValidationResult {
     DifferentTerrains,
     InvalidTerrain,
     NotOnTheMap,
-    TileNotEmpty
-
+    TileNotEmpty,
+    MustPutOnRuin,
+    NoSelection,
+    OnlySingleReplacement
 }

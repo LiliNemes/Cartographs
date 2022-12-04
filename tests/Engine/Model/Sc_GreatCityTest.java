@@ -26,7 +26,7 @@ public class Sc_GreatCityTest {
         ps.addTile(0, 0, TerrainType.Village);
         ps.addTile(0, 2, TerrainType.Village);
         ps.addTile(2,2, TerrainType.Village);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = greatCity.score(sheet);
         Assert.assertEquals(1, actual);
@@ -43,7 +43,7 @@ public class Sc_GreatCityTest {
         ps.addTile(0, 0, TerrainType.Village);
         ps.addTile(0, 2, TerrainType.Village);
         ps.addTile(2,2, TerrainType.Water);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = greatCity.score(sheet);
         Assert.assertEquals(0, actual);

@@ -26,7 +26,7 @@ public class Sc_TheBrokenRoadTest {
         ps.addTile(0, 0, TerrainType.Village);
         ps.addTile(0, 2, TerrainType.Village);
         ps.addTile(2,2, TerrainType.Village);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = theBrokenRoad.score(sheet);
         Assert.assertEquals(6, actual);
@@ -41,7 +41,7 @@ public class Sc_TheBrokenRoadTest {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = theBrokenRoad.score(sheet);
         Assert.assertEquals(0, actual);

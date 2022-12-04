@@ -1,8 +1,11 @@
 package Engine.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class ArrangementRule {
+public class ArrangementRule implements Serializable {
 
     private ArrayList<Layout> possibleLayouts;
 
@@ -30,5 +33,9 @@ public class ArrangementRule {
             if (possibleLayouts.get(i).isMatch(layout)) return true;
         }
         return false;
+    }
+
+    public List<Layout> getLayouts() {
+        return this.possibleLayouts;
     }
 }

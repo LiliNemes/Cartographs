@@ -7,7 +7,11 @@ import java.util.List;
  */
 public class Sc_Treetower extends ScoreCardBase{
     public Sc_Treetower() {
-        super("Treetower");
+        super("Treetower","Earn one reputation \n" +
+                "star for each forest space \n" +
+                "surrounded on all four sides \n" +
+                "by filled spaces or the edge of \n" +
+                "the map");
     }
 
     /**
@@ -19,8 +23,8 @@ public class Sc_Treetower extends ScoreCardBase{
     public int score(PlayerSheet sheet) {
         int points=0;
         Board b=sheet.getBoard();
-        for(int i=0; i<b.boardSize; i++) {
-            for(int j=0; j<b.boardSize; j++) {
+        for(int i=0; i<b.getBoardSize(); i++) {
+            for(int j=0; j<b.getBoardSize(); j++) {
                 Coordinate c = new Coordinate(i, j);
                 if(b.getTerrainType(c)==TerrainType.Forest) {
                     List<TerrainType> neighbours=b.getNeighboursTerrainType(c);

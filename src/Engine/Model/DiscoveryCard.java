@@ -1,5 +1,6 @@
 package Engine.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +66,22 @@ public class DiscoveryCard extends DiscoveryCardBase {
         return ValidationResult.Ok;
     }
 
+    public ValidationResult specialCheck(PlayerTilesSelection playerTilesSelection) {
+        if (playerTilesSelection.getSelectedTiles().size() != 1)
+            return ValidationResult.OnlySingleReplacement;
+
+        TerrainType type=playerTilesSelection.getTerrain();
+        boolean okTerrain=false;
+        for(int i=0; i<possibleTerrainTypes.size(); i++) {
+            if(type==possibleTerrainTypes.get(i))
+                okTerrain=true;
+        }
+        if(!okTerrain)
+            return ValidationResult.InvalidTerrain;
+
+        return ValidationResult.Ok;
+    }
+
     /**
      * Megmondja, hogy a lerakott formáért jár-e arany.
      * @param playerTilesSelection a játékos által kiválasztott mezők.
@@ -92,5 +109,13 @@ public class DiscoveryCard extends DiscoveryCardBase {
      */
     public int getTimeCost() {
         return timeCost;
+    }
+
+    public List<Layout> getAllLayouts() {
+        var result = new ArrayList<Layout>();
+        for(int i=0; i< possibleArrangementRules.size(); i++) {
+            result.addAll(possibleArrangementRules.get(i).getLayouts());
+        }
+        return result;
     }
 }

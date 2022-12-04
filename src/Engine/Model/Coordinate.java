@@ -1,12 +1,13 @@
 package Engine.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Koordináták. Ezek alapján különböztethetők meg a játéktábla mezői.
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
     private int x;
     private int y;
 
@@ -42,8 +43,13 @@ public class Coordinate {
      * @param coordinate A másik koordináta.
      * @return True ha megegyeznek, false ha nem.
      */
-    public boolean Equals(Coordinate coordinate) {
+    public boolean isEqualTo(Coordinate coordinate) {
         return (coordinate.getX() == x && coordinate.getY() == y);
+    }
+
+
+    public Coordinate offset(int x, int y) {
+        return new Coordinate(this.x + x, this.y + y);
     }
 
     /**
@@ -69,6 +75,38 @@ public class Coordinate {
         for(int i=0; i< split.length; i++) {
             result.add(Coordinate.parse(split[i]));
         }
+        return result;
+    }
+
+    public static List<Coordinate> removeCoordinates(List<Coordinate> in, List<Coordinate> coordinatesToRemove) {
+        List<Coordinate> result = new ArrayList<>();
+
+        for (int i=0; i<in.size(); i++) {
+            var coordinate = in.get(i);
+            boolean hasMatch = false;
+            for (int j=0; j<coordinatesToRemove.size(); j++) {
+                if (coordinatesToRemove.get(j).isEqualTo(coordinate)) hasMatch = true;
+            }
+            if (!hasMatch)
+                result.add(coordinate);
+        }
+
+        return result;
+    }
+
+    public static List<Coordinate> removeDuplicates(List<Coordinate> in) {
+        List<Coordinate> result = new ArrayList<>();
+
+        for (int i=0; i<in.size(); i++) {
+            var coordinate = in.get(i);
+            boolean hasMatch = false;
+            for (int j=0; j<result.size(); j++) {
+                if (result.get(j).isEqualTo(coordinate)) hasMatch = true;
+            }
+            if (!hasMatch)
+                result.add(coordinate);
+        }
+
         return result;
     }
 }

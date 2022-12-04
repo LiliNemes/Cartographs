@@ -5,7 +5,12 @@ package Engine.Model;
  */
 public class Sc_Greenbough extends ScoreCardBase{
     public Sc_Greenbough() {
-        super("Greenbough");
+        super("Greenbough", " Earn one \n" +
+                "reputation star for each row \n" +
+                "and column with at least one \n" +
+                "forest space. The same forest \n" +
+                "space may be scored in a row \n" +
+                "and a column.");
     }
 
     /**
@@ -17,10 +22,10 @@ public class Sc_Greenbough extends ScoreCardBase{
     public int score(PlayerSheet sheet) {
         int points=0;
         Board b=sheet.getBoard();
-        for(int i=0; i<b.boardSize; i++) {
+        for(int i=0; i<b.getBoardSize(); i++) {
             boolean isGreenRow=false;
             boolean isGreenColumn=false;
-            for(int j=0; j<b.boardSize; j++) {
+            for(int j=0; j<b.getBoardSize(); j++) {
                 Coordinate c=new Coordinate(i, j);
                 Coordinate c2=new Coordinate(j, i);
                 if(b.getTerrainType(c)==TerrainType.Forest)

@@ -28,7 +28,7 @@ public class Sc_TreetowerTest {
         ps.addTile(2,2, TerrainType.Village);
         ps.addTile(1, 2, TerrainType.Forest);
         ps.addTile(2, 0, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = treetower.score(sheet);
         Assert.assertEquals(1, actual);
@@ -46,7 +46,7 @@ public class Sc_TreetowerTest {
         ps.addTile(0, 2, TerrainType.Village);
         ps.addTile(2,2, TerrainType.Village);
         ps.addTile(2, 0, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = treetower.score(sheet);
         Assert.assertEquals(0, actual);

@@ -20,13 +20,13 @@ public class ArrangementRuleFactory {
 
         ArrayList<Layout> allLayouts = new ArrayList<>();
         allLayouts.add(layout);
-        for(int i=1; i<3; i++) {
+        for(int i=1; i<4; i++) {
             Layout turned=layout.turn90degrees(i);
             allLayouts.add(turned);
         }
         Layout mirrored = layout.mirror();
         allLayouts.add(mirrored);
-        for(int i=1; i<3; i++) {
+        for(int i=1; i<4; i++) {
             Layout turned=mirrored.turn90degrees(i);
             allLayouts.add(turned);
         }

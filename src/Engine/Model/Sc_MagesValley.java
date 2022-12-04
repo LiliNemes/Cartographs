@@ -7,7 +7,12 @@ import java.util.List;
  */
 public class Sc_MagesValley extends ScoreCardBase{
     public Sc_MagesValley() {
-        super("MagesValley");
+        super("MagesValley", " Earn two \n" +
+                "reputation stars for each water \n" +
+                "space adjacent to a mountain \n" +
+                "space. Earn one reputation star \n" +
+                "for each farm space adjacent to \n" +
+                "a mountain space");
     }
 
     /**
@@ -19,8 +24,8 @@ public class Sc_MagesValley extends ScoreCardBase{
     public int score(PlayerSheet sheet) {
         int points=0;
         Board b = sheet.getBoard();
-        for(int i=0; i<b.boardSize; i++) {
-            for(int j=0; j<b.boardSize; j++) {
+        for(int i=0; i<b.getBoardSize(); i++) {
+            for(int j=0; j<b.getBoardSize(); j++) {
                 Coordinate c=new Coordinate(i, j);
                 if(b.getTerrainType(c)==TerrainType.Mountain) {
                     List<TerrainType> neighbours = b.getNeighboursTerrainType(c);

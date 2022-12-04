@@ -25,7 +25,7 @@ public class Sc_ShieldgateTest {
         ps.addTile(0, 0, TerrainType.Village);
         ps.addTile(0, 2, TerrainType.Village);
         ps.addTile(2,2, TerrainType.Village);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = shieldgate.score(sheet);
         Assert.assertEquals(2, actual);
@@ -42,7 +42,7 @@ public class Sc_ShieldgateTest {
         ps.addTile(0, 0, TerrainType.Village);
         ps.addTile(0, 2, TerrainType.Village);
         ps.addTile(2,2, TerrainType.Water);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = shieldgate.score(sheet);
         Assert.assertEquals(0, actual);

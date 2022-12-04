@@ -6,7 +6,10 @@ package Engine.Model;
 public class Sc_SentinelWood extends ScoreCardBase{
 
     public Sc_SentinelWood() {
-        super("Sentinel Wood");
+        super("Sentinel Wood", "Earn one \n" +
+                "reputation star for each forest \n" +
+                "space adjacent to the edge of \n" +
+                "the map");
     }
 
     /**

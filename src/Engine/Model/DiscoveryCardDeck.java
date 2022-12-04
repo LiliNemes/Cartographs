@@ -2,6 +2,7 @@ package Engine.Model;
 
 import Engine.Builder.ArrangementRuleFactory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Felfedezőkártyák pakliját reprezentáló osztály.
  */
-public class DiscoveryCardDeck {
+public class DiscoveryCardDeck implements Serializable {
 
     private final List<DiscoveryCardBase> cards;
     private int time;
@@ -25,14 +26,28 @@ public class DiscoveryCardDeck {
         this.current = -1;
     }
 
+    public static DiscoveryCardDeck ambushDeck() {
+        List<DiscoveryCardBase> deck=new ArrayList<>();
+        deck.add(GnollRaid);
+        deck.add(GoblinAttack);
+        deck.add(KoboldOnslaught);
+        deck.add(BugbearAssault);
+        Collections.shuffle(deck);
+        DiscoveryCardDeck dc = new DiscoveryCardDeck(deck);
+        return dc;
+    }
+
     /**
      * Létrehozza, megkeveri a felfedezőkártyák pakliját.
-     * @param useAmbushCards legyenek-e benne AmbushCard-ok.
      * @return A kész, megkevert pakli.
      */
-    public static DiscoveryCardDeck createDeck(boolean useAmbushCards) {
+    public static DiscoveryCardDeck createDeck() {
         List<DiscoveryCardBase> deck=new ArrayList<>();
+
+        deck.add(RuinsCard.TempleRuins);
+        deck.add(RiftLands);
         deck.add(Marshlands);
+        deck.add(RuinsCard.OutpostRuins);
         deck.add(Orchard);
         deck.add(Hamlet);
         deck.add(FishingVillage);
@@ -42,12 +57,15 @@ public class DiscoveryCardDeck {
         deck.add(HinterlandStream);
         deck.add(Homestead);
         deck.add(TreetopVillage);
-        deck.add(RiftLands);
-        deck.add(RuinsCard.TempleRuins);
-        deck.add(RuinsCard.OutpostRuins);
+        Collections.shuffle(deck);
         DiscoveryCardDeck dc = new DiscoveryCardDeck(deck);
-        Collections.shuffle(dc.cards);
         return dc;
+    }
+
+    public DiscoveryCardDeck addCardToDeck(DiscoveryCardBase card) {
+        this.cards.add(card);
+        Collections.shuffle(this.cards);
+        return this;
     }
 
     /**
@@ -181,4 +199,9 @@ public class DiscoveryCardDeck {
                     ArrangementRuleFactory.buildBasedOn(Layout.createLayout("0,0"), false)
             ),
             List.of(TerrainType.Village, TerrainType.Water, TerrainType.Forest, TerrainType.Farm, TerrainType.Monster));
+
+    public static AmbushCard GnollRaid = new AmbushCard("Gnoll Raid", Layout.createLayout("0,0;0,1;0,2;1,0;1,2"));
+    public static AmbushCard KoboldOnslaught = new AmbushCard("Kobold Onslaught", Layout.createLayout("0,0;0,1;0,2;1,1"));
+    public static AmbushCard GoblinAttack = new AmbushCard("Goblin Attack", Layout.createLayout("0,0;1,1;2,2"));
+    public static AmbushCard BugbearAssault = new AmbushCard("Bugbear Assault", Layout.createLayout("0,0;0,1;2,0;2,1"));
 }

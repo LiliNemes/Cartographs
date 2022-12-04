@@ -1,40 +1,44 @@
 package Engine.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A játéktáblát megvalósító osztály.
  */
-public class Board {
+public class Board implements Serializable {
 
     private TerrainType[][] tiles;
     private List<Coordinate> ruins;
-    int boardSize;
+    private int boardSize;
 
     public int getBoardSize() {
         return boardSize;
     }
 
-    /**
-     * Konstruktor.
-     * @param size Mekkora legyen a térkép (négyzet oldala).
-     * @param mountains Lista, hogy mely koordinátákon legyenek hegyek.
-     * @param rifts Lista, hogy mely koordinátákon legyen pusztaság.
-     */
     public Board(int size, List<Coordinate> mountains, List<Coordinate> rifts) {
-        boardSize=size;
-        tiles = new TerrainType[boardSize][boardSize];
-        for (int i=0; i<boardSize; i++) {
-            for (int j=0; j<boardSize; j++) {
-                tiles[i][j] = TerrainType.Empty;
+        this(size, mountains, rifts, null);
+    }
+
+        /**
+         * Konstruktor.
+         * @param size Mekkora legyen a térkép (négyzet oldala).
+         * @param mountains Lista, hogy mely koordinátákon legyenek hegyek.
+         * @param rifts Lista, hogy mely koordinátákon legyen pusztaság.
+         * @param ruins Lista, hogy mely koordinátákon van rom
+         */
+    public Board(int size, List<Coordinate> mountains, List<Coordinate> rifts, List<Coordinate> ruins) {
+        this.boardSize=size;
+        this.ruins=ruins;
+        this.tiles = new TerrainType[boardSize][boardSize];
+        for (int i=0; i<this.boardSize; i++) {
+            for (int j=0; j<this.boardSize; j++) {
+                this.tiles[i][j] = TerrainType.Empty;
             }
         }
-        //TODO nem muszáj rift!
-        //TODO hegy nem lehet a térkép szélén!
         fillCoordinates(rifts, TerrainType.Rift);
         fillCoordinates(mountains, TerrainType.Mountain);
-
     }
 
     /**
@@ -54,28 +58,48 @@ public class Board {
     /**
      * Ellenőrzi, hogy a játékos által lerakandó mezők rajta vannak-e a térképen illetve üresek-e ezek a mezők.
      * @param playerTilesSelection A játékos által kiválasztott mezők.
-     * @param isThereRuin Van-e romkártya a játékban.
      * @return ValidationResult, Ok ha jó, ha nem akkor specifikus a hibára.
      */
-    public ValidationResult check(PlayerTilesSelection playerTilesSelection, boolean isThereRuin) {
+    public ValidationResult check(PlayerTilesSelection playerTilesSelection) {
         List<SelectedTile> selectedTiles=playerTilesSelection.getSelectedTiles();
+
         for(int i=0; i<selectedTiles.size(); i++) {
             int x=selectedTiles.get(i).getX();
             int y=selectedTiles.get(i).getY();
             if(this.getTerrainType(new Coordinate(x,y))!=TerrainType.Empty)
                 return ValidationResult.TileNotEmpty;
         }
+
         return ValidationResult.Ok;
+    }
+
+    public boolean isOnRuin(PlayerTilesSelection playerTilesSelection) {
+        List<SelectedTile> selectedTiles=playerTilesSelection.getSelectedTiles();
+        List<Coordinate> selectedCoordinates = new ArrayList<Coordinate>();
+        for(int i=0; i<selectedTiles.size(); i++) {
+            int x=selectedTiles.get(i).getX();
+            int y=selectedTiles.get(i).getY();
+            selectedCoordinates.add(new Coordinate(x, y));
+        }
+
+        return CoordinateHelpers.hasIntersection(selectedCoordinates, this.ruins);
+    }
+
+    public void executeAmbush(PlayerTilesSelection playerTilesSelection) {
+        for (int i = 0; i < playerTilesSelection.getSelectedTiles().size(); i++) {
+            int x = playerTilesSelection.getSelectedTiles().get(i).getX();
+            int y = playerTilesSelection.getSelectedTiles().get(i).getY();
+            this.tiles[x][y] = TerrainType.Monster;
+        }
     }
 
     /**
      * Végrehajtja a kiválasztott mezők módosítását, ha sikeres a lefolytatott ellenőrzés. Visszaadja a sikerességet
      * illetve a hegyek körbevevésével megszerzett aranyak számát.
      * @param playerTilesSelection A játékos által a lépésben kiválasztott mezők.
-     * @param isThereRuin Van-e romkártya éppen a játékban.
      * @return Execution result az eredményről.
      */
-    public ExecutionResult execute(PlayerTilesSelection playerTilesSelection, boolean isThereRuin) {
+    public ExecutionResult execute(PlayerTilesSelection playerTilesSelection) {
         int goldYield=0;
         List<Coordinate> mountains = new ArrayList<>();
         for (int i=0; i<boardSize; i++) {
@@ -90,7 +114,7 @@ public class Board {
                 }
             }
         }
-        var result = check(playerTilesSelection, isThereRuin);
+        var result = check(playerTilesSelection);
         if (result == ValidationResult.Ok) {
             for (int i = 0; i < playerTilesSelection.getSelectedTiles().size(); i++) {
                 int x = playerTilesSelection.getSelectedTiles().get(i).getX();
@@ -120,7 +144,7 @@ public class Board {
      * @return
      */
     public TerrainType getTerrainType(Coordinate coordinate) {
-        return tiles[coordinate.getX()][coordinate.getY()];
+        return safeGetTerrainType(coordinate.getX(), coordinate.getY());
     }
 
     /**
@@ -187,7 +211,7 @@ public class Board {
         for(int i=0; i<this.sameTerrainTypeNeighbours(coordinate).size(); i++) {
             boolean notInIt=true;
             for(int j=0; j< region.size(); j++) {
-                if(region.get(j).Equals(this.sameTerrainTypeNeighbours(coordinate).get(i)))
+                if(region.get(j).isEqualTo(this.sameTerrainTypeNeighbours(coordinate).get(i)))
                     notInIt=false;
             }
             if(notInIt)
@@ -211,7 +235,7 @@ public class Board {
                     boolean notInIt = true;
                     for(int n=0; n<allRegions.size(); n++) {
                         for(int m=0; m<allRegions.get(n).size(); m++) {
-                            if(allRegions.get(n).get(m).Equals(c))
+                            if(allRegions.get(n).get(m).isEqualTo(c))
                                 notInIt=false;
                         }
                     }
@@ -248,10 +272,95 @@ public class Board {
     public boolean hasRuin(Coordinate coordinate) {
         if (ruins != null) {
             for (int i = 0; i < this.ruins.size(); i++) {
-                if (coordinate.Equals(ruins.get(i)))
+                if (coordinate.isEqualTo(ruins.get(i)))
                     return true;
             }
         }
         return false;
+    }
+
+    public boolean canBePlacedOnRuin(Layout normalizedLayout) {
+        for (int x=0; x< this.boardSize; x++) {
+            for (int y=0; y< this.boardSize; y++) {
+                if (canLayoutBePlacedAt(x, y, normalizedLayout) && coversAtLeastASingleRuin(x, y, normalizedLayout))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canBePlaced(Layout normalizedLayout) {
+        for (int x=0; x< this.boardSize; x++) {
+            for (int y=0; y< this.boardSize; y++) {
+                if (canLayoutBePlacedAt(x, y, normalizedLayout))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean coversAtLeastASingleRuin(int x, int y, Layout normalizedLayout) {
+        for (int i=0; i < normalizedLayout.count(); i++) {
+            var coordinate = normalizedLayout.getCoordinate(i).offset(x, y);
+            if (hasRuin(coordinate)) return true;
+        }
+        return false;
+    }
+
+    // returns the number of free tiles covered by the given layout at the given coordinates
+    public int getNumberOfFreeTilesCoveredByLayoutAt(int x, int y, Layout normalizedLayout) {
+        int result = 0;
+        for (int i=0; i < normalizedLayout.count(); i++) {
+            var coordinate = normalizedLayout.getCoordinate(i).offset(x ,y);
+            var posX = coordinate.getX();
+            var posY = coordinate.getY();
+            if (posX >= 0 && posX < this.boardSize && posY >= 0 && posY < this.boardSize) {
+                if (tiles[posX][posY] == TerrainType.Empty) result++;
+            }
+        }
+        return result;
+    }
+
+    public boolean canLayoutBePlacedAt(int x, int y, Layout normalizedLayout) {
+        int freeTiles = getNumberOfFreeTilesCoveredByLayoutAt(x, y, normalizedLayout);
+        int layoutTilesNumber = normalizedLayout.count();
+        return (freeTiles == layoutTilesNumber);
+    }
+
+    public boolean areThereFreeRuinTiles() {
+        if (this.ruins == null) return false;
+        for (int i=0; i<this.ruins.size(); i++) {
+            var ruin = this.ruins.get(i);
+            var tile = tiles[ruin.getX()][ruin.getY()];
+            if (tile == TerrainType.Empty)
+                return true;
+        }
+        return false;
+    }
+
+    public int getMonsterPoints() {
+        List<Coordinate> freeTilesNextToMonster = new ArrayList<>();
+        for (int x=0; x<boardSize; x++) {
+            for (int y=0; y<boardSize; y++) {
+                var tile = tiles[x][y];
+                if (tile == TerrainType.Monster) {
+                    if (safeGetTerrainType(x+1, y) == TerrainType.Empty)
+                        freeTilesNextToMonster.add(new Coordinate(x+1, y));
+                    if (safeGetTerrainType(x-1, y) == TerrainType.Empty)
+                        freeTilesNextToMonster.add(new Coordinate(x-1, y));
+                    if (safeGetTerrainType(x, y+1) == TerrainType.Empty)
+                        freeTilesNextToMonster.add(new Coordinate(x, y+1));
+                    if (safeGetTerrainType(x, y-1) == TerrainType.Empty)
+                        freeTilesNextToMonster.add(new Coordinate(x, y-1));
+                }
+            }
+        }
+        return Coordinate.removeDuplicates(freeTilesNextToMonster).size();
+    }
+
+    private TerrainType safeGetTerrainType(int x, int y) {
+        if (x < 0 || x >= boardSize) return TerrainType.Rift;
+        if (y < 0 || y >= boardSize) return TerrainType.Rift;
+        return tiles[x][y];
     }
 }

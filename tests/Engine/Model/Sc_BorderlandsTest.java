@@ -25,7 +25,7 @@ public class Sc_BorderlandsTest {
         ps.addTile(0, 1, TerrainType.Water);
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(2, 1, TerrainType.Farm);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = borderlands.score(sheet);
         Assert.assertEquals(6, actual);
@@ -40,7 +40,7 @@ public class Sc_BorderlandsTest {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(2, 1, TerrainType.Farm);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = borderlands.score(sheet);
         Assert.assertEquals(0, actual);

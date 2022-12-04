@@ -1,9 +1,11 @@
 package Engine.Model;
 
+import java.io.Serializable;
+
 /**
  * Felfedező kártyák megvalósításában segítő osztály,
  */
-public class DiscoveryCardBase {
+public class DiscoveryCardBase implements Serializable {
     private DiscoveryCardType cardType;
     private String name;
 

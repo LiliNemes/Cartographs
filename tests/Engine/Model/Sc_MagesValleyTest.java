@@ -27,7 +27,7 @@ public class Sc_MagesValleyTest {
         ps.addTile(0, 2, TerrainType.Forest);
         ps.addTile(2, 2, TerrainType.Water);
         ps.addTile(1, 0, TerrainType.Water);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = magesValley.score(sheet);
         Assert.assertEquals(3, actual);
@@ -43,7 +43,7 @@ public class Sc_MagesValleyTest {
         ps.addTile(0, 0, TerrainType.Farm);
         ps.addTile(0, 2, TerrainType.Forest);
         ps.addTile(2, 2, TerrainType.Water);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = magesValley.score(sheet);
         Assert.assertEquals(0, actual);

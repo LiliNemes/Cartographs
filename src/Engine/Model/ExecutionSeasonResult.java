@@ -17,10 +17,12 @@ public class ExecutionSeasonResult {
         return money;
     }
 
-    int a;
+    public int getMonster() { return monster; }
 
+    int a;
     int b;
     int money;
+    int monster;
     public Seasons getSeason() {
         return season;
     }
@@ -32,13 +34,14 @@ public class ExecutionSeasonResult {
     boolean endOfSeason;
     Seasons season;
 
-    public ExecutionSeasonResult(ValidationResult v, boolean e, int one, int two, int m, Seasons s) {
-        vr=v;
-        a=one;
-        b=two;
-        season=s;
-        endOfSeason=e;
-        money=m;
+    public ExecutionSeasonResult(ValidationResult v, boolean e, int one, int two, int m, int monster, Seasons s) {
+        this.vr=v;
+        this.a=one;
+        this.b=two;
+        this.season=s;
+        this.endOfSeason=e;
+        this.money=m;
+        this.monster = monster;
     }
     public ValidationResult getVr() {
         return vr;

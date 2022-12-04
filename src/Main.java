@@ -1,3 +1,4 @@
+import Engine.Model.ScoreBoard;
 import UI.GameFrame;
 import UI.ImageBank;
 
@@ -9,7 +10,20 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        ImageBank tileImages = new ImageBank("Tiles", List.of( "forest", "village", "water", "farm", "mountain", "monster", "ruin"));
+        ImageBank tileImages = new ImageBank("Tiles", List.of(
+                "forest",
+                "forestruin",
+                "village",
+                "villageruin",
+                "water",
+                "waterruin",
+                "farm",
+                "farmruin",
+                "mountain",
+                "monster",
+                "monsterruin",
+                "empty",
+                "emptyruin"));
         ImageBank cardImages = new ImageBank("cards", List.of(
                 "borderlands",
                 "canallake",
@@ -34,10 +48,16 @@ public class Main {
                 "thebrokenroad",
                 "thecauldrons",
                 "treetower",
-                "wildholds"));
+                "wildholds",
+                "templeruins",
+                "outpostruins",
+                "koboldonslaught",
+                "goblinattack",
+                "gnollraid",
+                "bugbearassault"));
         ImageBank otherImages = new ImageBank("", List.of( "scoreBlock"));
 
-        GameFrame frame = new GameFrame("Game", tileImages, cardImages, otherImages);
+        GameFrame frame = new GameFrame("Cartographers", tileImages, cardImages, otherImages);
         SwingUtilities.invokeLater(() -> {
             frame.setMinimumSize(new Dimension(1400, 800));
             frame.setPreferredSize(new Dimension(1400, 800));

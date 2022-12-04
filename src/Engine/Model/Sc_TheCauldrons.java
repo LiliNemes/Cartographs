@@ -8,7 +8,11 @@ import java.util.List;
 public class Sc_TheCauldrons extends ScoreCardBase{
 
     public Sc_TheCauldrons() {
-        super("TheCauldrons");
+        super("TheCauldrons", "Earn one \n" +
+                "reputation star for each empty \n" +
+                "space surrounded on all four \n" +
+                "sides by filled spaces or the \n" +
+                "edge of the map");
     }
 
     /**
@@ -20,8 +24,8 @@ public class Sc_TheCauldrons extends ScoreCardBase{
     public int score(PlayerSheet sheet) {
         int points=0;
         Board b=sheet.getBoard();
-        for(int i=0; i<b.boardSize; i++) {
-            for(int j=0; j<b.boardSize; j++) {
+        for(int i=0; i<b.getBoardSize(); i++) {
+            for(int j=0; j<b.getBoardSize(); j++) {
                 Coordinate c = new Coordinate(i, j);
                 if(b.getTerrainType(c)==TerrainType.Empty) {
                     List<TerrainType> neighbours=b.getNeighboursTerrainType(c);

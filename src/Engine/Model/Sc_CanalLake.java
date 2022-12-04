@@ -5,7 +5,10 @@ package Engine.Model;
  */
 public class Sc_CanalLake extends ScoreCardBase{
     public Sc_CanalLake() {
-        super("CanalLake");
+        super("CanalLake","Earn six \n" +
+                "reputation stars for each \n" +
+                "complete row or complete \n" +
+                "column of filled spaces.");
     }
 
     /**

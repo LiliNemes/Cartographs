@@ -5,7 +5,10 @@ package Engine.Model;
  */
 public class Sc_Shieldgate extends ScoreCardBase{
     public Sc_Shieldgate() {
-        super("Shieldgate");
+        super("Shieldgate", "Earn two reputation \n" +
+                "stars for each village space in \n" +
+                "the second largest cluster of \n" +
+                "village spaces");
     }
 
     /**

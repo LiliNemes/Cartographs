@@ -1,12 +1,13 @@
 package Engine.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Koordinátákból álló forma,
  */
-public class Layout {
+public class Layout implements Serializable {
     private List<Coordinate> coordinates;
 
     /**
@@ -36,7 +37,7 @@ public class Layout {
 
         for (int i = 0; i < otherLayout.coordinates.size(); i++) {
             var otherCord = otherLayout.coordinates.get(i);
-            if (!this.HasCoordinate(otherCord)) return false;
+            if (!this.hasCoordinate(otherCord)) return false;
         }
         return true;
     }
@@ -123,14 +124,36 @@ public class Layout {
         return mirrored;
     }
 
+    public Layout surroundings() {
+        List<Coordinate> surroundingCoordinates = new ArrayList<>();
+        for (int i=0; i<this.coordinates.size(); i++) {
+            var coordinate = this.coordinates.get(i);
+            surroundingCoordinates.add(coordinate.offset(1,0));
+            surroundingCoordinates.add(coordinate.offset(-1,0));
+            surroundingCoordinates.add(coordinate.offset(0,1));
+            surroundingCoordinates.add(coordinate.offset(0,-1));
+        }
+        List<Coordinate> noDuplicates = Coordinate.removeDuplicates(surroundingCoordinates);
+        List<Coordinate> cleansed = Coordinate.removeCoordinates(noDuplicates, this.coordinates);
+        return new Layout(cleansed);
+    }
+
+    public int count() {
+        return this.coordinates.size();
+    }
+
+    public Coordinate getCoordinate(int idx) {
+        return this.coordinates.get(idx);
+    }
+
     /**
      * A paraméterként megadott koordináta a Layout koordinátái között van-e.
      * @param coordinate A paraméterként megadott koordináta.
      * @return True ha igen, false ha nem.
      */
-    private boolean HasCoordinate(Coordinate coordinate) {
+    private boolean hasCoordinate(Coordinate coordinate) {
         for (int i = 0; i < coordinates.size(); i++) {
-            if (coordinates.get(i).Equals(coordinate)) return true;
+            if (coordinates.get(i).isEqualTo(coordinate)) return true;
         }
         return false;
     }

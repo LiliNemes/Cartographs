@@ -2,20 +2,22 @@ package Engine.Builder;
 
 import Engine.Model.*;
 
+import java.io.*;
 import java.util.*;
 
 public class GameFactory {
 
     public static GameFactory Instance = new GameFactory();
 
-    public Game createSolitaireGame(String playerName) {
+    public Game createSolitaireGame(String playerName, boolean isHard) {
 
         Map<Seasons, DiscoveryCardDeck> discoveryCardDecks = new HashMap<>();
 
-        discoveryCardDecks.put(Seasons.spring, DiscoveryCardDeck.createDeck(false));
-        discoveryCardDecks.put(Seasons.summer, DiscoveryCardDeck.createDeck(false));
-        discoveryCardDecks.put(Seasons.autumn, DiscoveryCardDeck.createDeck(false));
-        discoveryCardDecks.put(Seasons.winter, DiscoveryCardDeck.createDeck(false));
+        var ambushDeck = DiscoveryCardDeck.ambushDeck();
+        discoveryCardDecks.put(Seasons.spring, DiscoveryCardDeck.createDeck().addCardToDeck(ambushDeck.draw()));
+        discoveryCardDecks.put(Seasons.summer, DiscoveryCardDeck.createDeck().addCardToDeck(ambushDeck.draw()));
+        discoveryCardDecks.put(Seasons.autumn, DiscoveryCardDeck.createDeck().addCardToDeck(ambushDeck.draw()));
+        discoveryCardDecks.put(Seasons.winter, DiscoveryCardDeck.createDeck().addCardToDeck(ambushDeck.draw()));
 
         Map<Seasons, Integer> seasonTimes = new HashMap<>();
 
@@ -23,6 +25,7 @@ public class GameFactory {
         seasonTimes.put(Seasons.summer, 8);
         seasonTimes.put(Seasons.autumn, 7);
         seasonTimes.put(Seasons.winter, 6);
+
         //4 x ScoreCardBase lista tipusonként egy
         Sc_SentinelWood sw=new Sc_SentinelWood();
         Sc_CanalLake cl=new Sc_CanalLake();
@@ -73,7 +76,36 @@ public class GameFactory {
         scoreCards.put(Seasons.summer, chosenCardsSummer);
         scoreCards.put(Seasons.autumn, chosenCardsAutumn);
         scoreCards.put(Seasons.winter, chosenCardsWinter);
-        return new Game(new PlayerSheet(playerName, BoardDeck.createBoard()), discoveryCardDecks ,scoreCards, seasonTimes);
+
+        Board board = isHard ? BoardDeck.createHardBoard() : BoardDeck.createBoard();
+        return new Game(new PlayerSheet(playerName, board), discoveryCardDecks, ambushDeck ,scoreCards, seasonTimes);
+    }
+
+    public void saveGame(String fileName, Game game) {
+        try {
+            FileOutputStream f = new FileOutputStream(new File(fileName));
+            ObjectOutputStream o = new ObjectOutputStream(f);
+            o.writeObject(game);
+            o.close();
+            f.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Game loadGame(String fileName) {
+        try {
+            FileInputStream f = new FileInputStream(new File(fileName));
+            ObjectInputStream  o = new ObjectInputStream (f);
+            var game = (Game)o.readObject();
+            o.close();
+            f.close();
+            return game;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

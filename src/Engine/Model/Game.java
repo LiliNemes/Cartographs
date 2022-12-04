@@ -1,8 +1,10 @@
 package Engine.Model;
 
 import UI.IGameEngine;
+import UI.ScoreCardInfo;
 import UI.TileInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +13,21 @@ import java.util.Stack;
 /**
  * A játékot reprezentáló osztály.
  */
-public class Game implements IGameEngine {
+public class Game implements IGameEngine, Serializable {
 
-    public PlayerSheet getCurrentSheet() {
+    private PlayerSheet getCurrentSheet() {
         return currentSheet;
+    }
+
+    @Override
+    public String getPlayerName() {
+        return currentSheet.getName();
     }
 
     private PlayerSheet currentSheet;
     private Map<Seasons, DiscoveryCardDeck> discoveryCardDecks;
+
+    private DiscoveryCardDeck ambushDeck;
 
     public List<ScoreCardBase> getSeasonalScoreCards(Seasons s) {
         List<ScoreCardBase> ret=new ArrayList<>();
@@ -43,12 +52,14 @@ public class Game implements IGameEngine {
      * Konstruktor.
      * @param currentSheet A játékos lapja.
      * @param discoveryCardDecks A felfedező kártyák paklija évszakonként.
+     * @param ambushDeck A szörnykáryták
      * @param scoreCards A pontozókártyák évszakonként.
      * @param seasonTimes Az évszakok és időtartamaik.
      */
-    public Game(PlayerSheet currentSheet, Map<Seasons, DiscoveryCardDeck> discoveryCardDecks, Map<Seasons, List<ScoreCardBase>> scoreCards, Map<Seasons, Integer> seasonTimes) {
+    public Game(PlayerSheet currentSheet, Map<Seasons, DiscoveryCardDeck> discoveryCardDecks, DiscoveryCardDeck ambushDeck, Map<Seasons, List<ScoreCardBase>> scoreCards, Map<Seasons, Integer> seasonTimes) {
         this.currentSheet = currentSheet;
         this.discoveryCardDecks = discoveryCardDecks;
+        this.ambushDeck = ambushDeck;
         this.scoreCards = scoreCards;
         this.seasonTimes=seasonTimes;
         this.currentSeason = Seasons.spring;
@@ -59,19 +70,24 @@ public class Game implements IGameEngine {
      * Addig húz, amíg nem ruin kártya jön.
      */
     //TODO could not be tested! :( Tapasztalati alapon okk.
-    public void drawNextCard() {
+    public PlayerTilesSelection drawNextCard() {
         //ckeck if inplay cards is empty
         // draw till not ruin
         if(discoveryCardsInPlay.empty()) {
             DiscoveryCardDeck currentDeck =discoveryCardDecks.get(currentSeason);
             var newCard = currentDeck.draw();
             discoveryCardsInPlay.push(newCard);
-            while(discoveryCardsInPlay.get(discoveryCardsInPlay.size()-1).getCardType()==DiscoveryCardType.Ruin) {
+            while(discoveryCardsInPlay.peek().getCardType()==DiscoveryCardType.Ruin) {
                 var newCard2 = currentDeck.draw();
                 discoveryCardsInPlay.push(newCard2);
             }
-
         }
+
+        if (discoveryCardsInPlay.peek().getCardType()==DiscoveryCardType.Ambush) {
+            var ambushCard = (AmbushCard)discoveryCardsInPlay.peek();
+            return ambushCard.calculateAmbush(this.currentSheet.getBoard());
+        }
+        return null;
     }
 
     /**
@@ -82,11 +98,11 @@ public class Game implements IGameEngine {
 
     //TODO could not be tested :(
     public ExecutionSeasonResult executePlayerSelection(PlayerTilesSelection playerTilesSelection) {
-        int i = this.discoveryCardsInPlay.size()-1;
-        ValidationResult vr = this.currentSheet.execute(playerTilesSelection,(DiscoveryCard) this.discoveryCardsInPlay.get(i));
+        var isThereRuinCard = this.discoveryCardsInPlay.size() > 1;
+        ValidationResult vr = this.currentSheet.execute(playerTilesSelection, this.discoveryCardsInPlay.peek(), isThereRuinCard);
         //ha hiba akkor vissza hibával
         if(vr!=ValidationResult.Ok)
-            return new ExecutionSeasonResult(vr, false, -1, -1, -1, this.currentSeason);
+            return new ExecutionSeasonResult(vr, false, -1, -1, -1, -1, this.currentSeason);
         //ha jó
         //clear cards in play
         //current seasonhöz tartozó deck time-ja nagyobb e mint a season time
@@ -103,28 +119,32 @@ public class Game implements IGameEngine {
                 int a= this.getSeasonalScoreCards(Seasons.winter).get(0).score(this.getCurrentSheet());
                 int b= this.getSeasonalScoreCards(Seasons.winter).get(1).score(this.getCurrentSheet());
                 int money=this.getCurrentSheet().getAccumulatedGold();
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
+                int monster=this.getCurrentSheet().getMonsterPoints();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, monster, currentSeason);
             }
             else if(currentSeason==Seasons.spring) {
                 int a= this.getSeasonalScoreCards(Seasons.spring).get(0).score(this.getCurrentSheet());
                 int b= this.getSeasonalScoreCards(Seasons.spring).get(1).score(this.getCurrentSheet());
                 int money=this.getCurrentSheet().getAccumulatedGold();
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
+                int monster=this.getCurrentSheet().getMonsterPoints();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money,monster, currentSeason);
             }
             else if(currentSeason==Seasons.summer) {
                 int a= this.getSeasonalScoreCards(Seasons.summer).get(0).score(this.getCurrentSheet());
                 int b= this.getSeasonalScoreCards(Seasons.summer).get(1).score(this.getCurrentSheet());
                 int money=this.getCurrentSheet().getAccumulatedGold();
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
+                int monster=this.getCurrentSheet().getMonsterPoints();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, monster, currentSeason);
             }
             else if(currentSeason==Seasons.autumn) {
                 int a= this.getSeasonalScoreCards(Seasons.autumn).get(0).score(this.getCurrentSheet());
                 int b= this.getSeasonalScoreCards(Seasons.autumn).get(1).score(this.getCurrentSheet());
                 int money=this.getCurrentSheet().getAccumulatedGold();
-                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, currentSeason);
+                int monster=this.getCurrentSheet().getMonsterPoints();
+                return new ExecutionSeasonResult(ValidationResult.Ok, true, a, b, money, monster, currentSeason);
             }
         }
-        return new ExecutionSeasonResult(ValidationResult.Ok, false, -1, -1, -1, currentSeason);
+        return new ExecutionSeasonResult(ValidationResult.Ok, false, -1, -1, -1, -1, currentSeason);
     }
 
     public List<String> getDrawnDiscoveryCards() {
@@ -135,18 +155,22 @@ public class Game implements IGameEngine {
         return names;
     }
 
-    public List<String> getDrawnScoreCards() {
-        List<String> names = new ArrayList<>();
-        names.add(this.scoreCards.get(Seasons.spring).get(0).getName());
-        names.add(this.scoreCards.get(Seasons.summer).get(0).getName());
-        names.add(this.scoreCards.get(Seasons.autumn).get(0).getName());
-        names.add(this.scoreCards.get(Seasons.winter).get(0).getName());
+    public List<ScoreCardInfo> getDrawnScoreCards() {
+        List<ScoreCardInfo> names = new ArrayList<>();
+        names.add(new ScoreCardInfo(this.scoreCards.get(Seasons.spring).get(0).getName(),this.scoreCards.get(Seasons.spring).get(0).getDescription()));
+        names.add(new ScoreCardInfo(this.scoreCards.get(Seasons.summer).get(0).getName(),this.scoreCards.get(Seasons.summer).get(0).getDescription()));
+        names.add(new ScoreCardInfo(this.scoreCards.get(Seasons.autumn).get(0).getName(),this.scoreCards.get(Seasons.autumn).get(0).getDescription()));
+        names.add(new ScoreCardInfo(this.scoreCards.get(Seasons.winter).get(0).getName(),this.scoreCards.get(Seasons.winter).get(0).getDescription()));
         return names;
     }
 
     public List<TerrainType> getPossibleTerrainTypes() {
 
-        DiscoveryCard dc = (DiscoveryCard) this.discoveryCardsInPlay.get(this.discoveryCardsInPlay.size()-1);
+        var lastCard = this.discoveryCardsInPlay.get(this.discoveryCardsInPlay.size()-1);
+        if (lastCard.getCardType() == DiscoveryCardType.Ambush) {
+            return List.of(TerrainType.Monster);
+        }
+        DiscoveryCard dc = (DiscoveryCard)lastCard;
         List<TerrainType> ret = dc.getPossibleTerrainTypes();
         return ret;
     }
@@ -164,7 +188,7 @@ public class Game implements IGameEngine {
 
     @Override
     public int getSize() {
-        return this.currentSheet.getBoard().boardSize;
+        return this.currentSheet.getBoard().getBoardSize();
     }
 
     @Override

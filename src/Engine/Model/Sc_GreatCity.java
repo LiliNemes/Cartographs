@@ -8,7 +8,11 @@ import java.util.List;
  */
 public class Sc_GreatCity extends ScoreCardBase{
     public Sc_GreatCity() {
-        super("GreatCity");
+        super("GreatCity", "Earn one reputation \n" +
+                "star for each village space in \n" +
+                "the largest cluster of village \n" +
+                "spaces that is not adjacent to a \n" +
+                "mountain space");
     }
 
     /**

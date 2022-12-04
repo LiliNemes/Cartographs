@@ -4,7 +4,9 @@ package Engine.Model;
  */
 public class Sc_Wildholds extends ScoreCardBase{
     public Sc_Wildholds() {
-        super("Wildholds");
+        super("Wildholds"," Earn eight \n" +
+                "reputation stars for each cluster \n" +
+                "of six or more village spaces.");
     }
 
     /**

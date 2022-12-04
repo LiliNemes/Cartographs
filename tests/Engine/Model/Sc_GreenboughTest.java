@@ -26,7 +26,7 @@ public class Sc_GreenboughTest {
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Forest);
         ps.addTile(0, 2, TerrainType.Forest);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = greenbough.score(sheet);
         Assert.assertEquals(3, actual);
@@ -43,7 +43,7 @@ public class Sc_GreenboughTest {
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(0, 2, TerrainType.Water);
         ps.addTile(2,2, TerrainType.Farm);
-        board.execute(ps, false);
+        board.execute(ps);
         PlayerSheet sheet = new PlayerSheet("Lili", board);
         int actual = greenbough.score(sheet);
         Assert.assertEquals(0, actual);
