@@ -118,6 +118,10 @@ public class Layout implements Serializable {
         return mirrored;
     }
 
+    /**
+     * Új Layoutot készít a Layoutot körülvevő mezőkből.
+     * @return Az új Layout.
+     */
     public Layout surroundings() {
         List<Coordinate> surroundingCoordinates = new ArrayList<>();
         for (Coordinate coordinate : this.coordinates) {
@@ -131,10 +135,19 @@ public class Layout implements Serializable {
         return new Layout(cleansed);
     }
 
+    /**
+     *
+     * @return Hány mezőből áll a Layout.
+     */
     public int count() {
         return this.coordinates.size();
     }
 
+    /**
+     *
+     * @param idx index.
+     * @return A megadott indexű koordinátája a Layoutnak.
+     */
     public Coordinate getCoordinate(int idx) {
         return this.coordinates.get(idx);
     }

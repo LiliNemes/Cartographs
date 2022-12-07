@@ -115,8 +115,4 @@ public class PlayerTilesSelection {
         return null;
     }
 
-    //TODO - not used
-    public void ClearAll() {
-        selectedTiles.clear();
-    }
 }

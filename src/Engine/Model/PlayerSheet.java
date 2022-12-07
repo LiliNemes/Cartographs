@@ -3,14 +3,14 @@ package Engine.Model;
 import java.io.Serializable;
 
 /**
- * Egy játékos pontozó- és játéklapját reprezentáló osztály.
+ * Egy játékos pontozó- és játéklapját reprezentáló osztály. Befejezett évszakonként tartalmazza a részpontszámokat.
+ * Évszakok sorrendje megfelel a játékban szereplő sorrenddel.
+ * A pontok sorrendje: A, B, money, monster.
  */
 public class PlayerSheet implements Serializable {
     private final String name;
     private final Board board;
-    // Befejezett évszakonként tartalmazza a részpontszámokat
-    // Évszakok sorrendje megfelel a játékban szereplő sorrenddel
-    // A pontok sorrendje: A, B, money, monster
+
     private final int[][] results;
     private int accumulatedGold;
     /**
@@ -26,10 +26,19 @@ public class PlayerSheet implements Serializable {
         results = new int[4][4];
     }
 
+    /**
+     *
+     * @return A játékos neve.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Beállítja az adott évszakban szerzett pontokat.
+     * @param season Adott évszak.
+     * @param s A szerzett pontok tömbje.
+     */
     public void setSeasonResults(Seasons season, int[] s) {
         int id = -1;
         switch (season) {
@@ -41,6 +50,11 @@ public class PlayerSheet implements Serializable {
         System.arraycopy(s, 0, results[id], 0, 4);
     }
 
+    /**
+     *
+     * @param s Adott évszak.
+     * @return Adott évszakban szerzett pontok.
+     */
     public int[] getSeasonScores(Seasons s) {
         return switch (s) {
             case spring -> results[0];
@@ -94,6 +108,11 @@ public class PlayerSheet implements Serializable {
         return two;
     }
 
+    /**
+     * Megvizsgálja, hogy a paraméterként kapott DiscoveryCard bármely alakjának bármely formája romra helyezhető-e.
+     * @param discoveryCard A paraméterként kapott kártya.
+     * @return true ha igen, false ha nem.
+     */
     private boolean canBePlacedOnRuin(DiscoveryCard discoveryCard) {
 
         if (!this.board.areThereFreeRuinTiles())
@@ -107,6 +126,11 @@ public class PlayerSheet implements Serializable {
         return false;
     }
 
+    /**
+     * Megvizsgálja, hogy a paraméterként kapott DiscoveryCard bármely alakjának bármely formája szabályosan lehelyezhető-e.
+     * @param discoveryCard A kártya.
+     * @return true ha lehelyezhető, false ha nem.
+     */
     private boolean canBePlaced(DiscoveryCard discoveryCard) {
 
         var layouts = discoveryCard.getAllLayouts();
@@ -155,10 +179,18 @@ public class PlayerSheet implements Serializable {
         return this.accumulatedGold;
     }
 
+    /**
+     *
+     * @return A szörnyek miatt szerzett mínuszpontok széma.
+     */
     public int getMonsterPoints() {
         return this.board.getMonsterPoints() * -1;
     }
 
+    /**
+     *
+     * @return Az egész játékban a függvény meghívásáig szerzett pontok száma.
+     */
     public int getScoreSum() {
         int sum = 0;
         for (int[] i : results) {
