@@ -8,10 +8,13 @@ import Engine.Model.ValidationResult;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -43,6 +46,8 @@ public class GameFrame extends JFrame implements UserOkEventListener {
     private IGameEngine currentGame;
     private ScoreBoard scoreBoard;
     private JMenuBar menuBar;
+    private Font font;
+    private Color bgColor = new Color(255,238,203);
 
     public GameFrame(String title, ImageBank tileImages, ImageBank cardImages) throws HeadlessException {
         super(title);
@@ -79,11 +84,15 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.showDiscoveryCards();
         this.showCurrentSeason();
         this.createScores();
+        int[] zero=new int[4];
+        for(int i=0; i<4;i++){
+            this.showScores(i, zero);
+        }
         this.showGold();
     }
 
     private void showCurrentSeason() {
-        String info = String.format("Season: %s, Actual time:%s, Season time:%s", this.currentGame.getCurrentSeason().name(), this.currentGame.getCurrentTime(), this.currentGame.getCurrentSeasonTime());
+        String info = String.format("Season: %s, Actual time: %s, Season time: %s", this.currentGame.getCurrentSeason().name(), this.currentGame.getCurrentTime(), this.currentGame.getCurrentSeasonTime());
         String name;
         if (this.currentGame.getPlayerName() == null) {
             name = "null";
@@ -95,7 +104,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
 
     private void showGold() {
         int golds = this.currentGame.getGolds();
-        this.goldLabel.setText(String.format("Gold:%s", golds));
+        this.goldLabel.setText(String.format("Gold: %s", golds));
     }
 
     private void createScores() {
@@ -187,7 +196,21 @@ public class GameFrame extends JFrame implements UserOkEventListener {
     private void initFrame() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
+        URL url = ClassLoader.getSystemResource("UI/Images/icon.png");
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Image img = kit.createImage(url);
+        this.setIconImage(img);
         setLayout(new BorderLayout());
+        this.getContentPane().setBackground(bgColor);
+
+
+        GraphicsEnvironment ge = null;
+        try{
+            ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, GameFrame.class.getResourceAsStream("/UI/Images/whisky.ttf")));
+        } catch(FontFormatException | IOException e){
+            System.err.println("No font.");
+        }
 
         this.mainPanel = new JPanel();
         this.mainPanel.setLayout(new BorderLayout());
@@ -197,13 +220,15 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         JPanel scoreBorderPanel = new JPanel();
         scoreBorderPanel.setPreferredSize(new Dimension(400, 160));
         scoreBorderPanel.setLayout(new BorderLayout());
+        scoreBorderPanel.setBackground(bgColor);
 
         this.scoreArea = new JPanel();
         this.scoreArea.setLayout(new FlowLayout());
+        this.scoreArea.setBackground(bgColor);
         scoreBorderPanel.add(this.scoreArea, BorderLayout.CENTER);
 
         this.goldLabel = new JLabel();
-        this.goldLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        this.goldLabel.setFont(new Font("Whisky-1670", Font.PLAIN, 20));
         this.goldLabel.setBorder(new EmptyBorder(4, 10, 4, 0));
         scoreBorderPanel.add(this.goldLabel, BorderLayout.NORTH);
 
@@ -216,21 +241,26 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         add(this.rightPanel, BorderLayout.EAST);
 
         this.rightPanel.setLayout(new BorderLayout());
+        this.rightPanel.setBackground(bgColor);
         this.infoLabel = new JLabel();
-        this.infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        this.infoLabel.setFont(new Font("Whisky-1670", Font.PLAIN, 20));
         this.infoLabel.setBorder(new EmptyBorder(4, 10, 4, 0));
         this.rightPanel.add(this.infoLabel, BorderLayout.NORTH);
 
         this.discoveryPanel = new JPanel();
         this.discoveryPanel.setPreferredSize(new Dimension(400, 300));
         this.discoveryPanel.setLayout(null);
+        this.discoveryPanel.setBackground(bgColor);
         this.rightPanel.add(this.discoveryPanel, BorderLayout.SOUTH);
 
         this.scoreCardPanel = new JPanel();
         this.scoreCardPanel.setLayout(new FlowLayout());
+        this.scoreCardPanel.setBackground(bgColor);
         this.rightPanel.add(this.scoreCardPanel, BorderLayout.CENTER);
 
         this.menuBar = this.createMenuBar();
+        this.menuBar.setBackground(bgColor);
+        this.menuBar.setBorder(new LineBorder(bgColor));
         this.setJMenuBar(this.menuBar);
     }
 

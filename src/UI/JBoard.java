@@ -21,6 +21,7 @@ public class JBoard extends JPanel {
     private JTile[][] tiles;
     private TerrainType userTerrainType;
     private IBoardInfo boardInfo;
+    private final Color bgColor = new Color(255,238,203);
 
     public JBoard(ImageBank tileImages) {
 
@@ -31,33 +32,39 @@ public class JBoard extends JPanel {
 
         this.tilePanel = new JPanel();
         this.tilePanel.setPreferredSize(new Dimension(300, 300));
+        this.tilePanel.setBackground(bgColor);
         this.setLayout(new BorderLayout());
         add(tilePanel, BorderLayout.CENTER);
 
         this.controlPanel = new JPanel();
         this.controlPanel.setPreferredSize(new Dimension(120, 200));
         this.controlPanel.setLayout(new BorderLayout());
+        this.controlPanel.setBackground(bgColor);
         add(controlPanel, BorderLayout.WEST);
 
         this.selectorPanel = new JPanel();
         this.selectorPanel.setLayout(new BoxLayout(this.selectorPanel, BoxLayout.Y_AXIS));
+        this.selectorPanel.setBackground(bgColor);
         this.controlPanel.add(this.selectorPanel, BorderLayout.CENTER);
 
         this.buttonPanel = new JPanel();
         this.buttonPanel.setLayout(new BoxLayout(this.buttonPanel, BoxLayout.Y_AXIS));
+        this.buttonPanel.setBackground(bgColor);
 
         this.okButton = new JButton("Ok");
         this.okButton.setMaximumSize(new Dimension(90, 35));
         this.okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.okButton.setBackground(new Color(18,15,10));
+        this.okButton.setBackground(new Color(54,37,27));
         this.okButton.setForeground(Color.white);
+        this.okButton.setFont(new Font("Whisky-1670", Font.PLAIN, 16));
         this.okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.okButton.setFocusPainted(false);
         this.clearButton = new JButton("Clear");
         this.clearButton.setMaximumSize(new Dimension(90, 35));
         this.clearButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.clearButton.setBackground(new Color(18,15,10));
+        this.clearButton.setBackground(new Color(54,37,27));
         this.clearButton.setForeground(Color.white);
+        this.clearButton.setFont(new Font("Whisky-1670", Font.PLAIN, 16));
         this.clearButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.clearButton.setFocusPainted(false);
 
@@ -97,12 +104,13 @@ public class JBoard extends JPanel {
             var image = this.tileImages.getByName(terrainType.name().toLowerCase());
             var scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             button.setIcon(new ImageIcon(scaledImage));
-            button.setBackground(new Color(18,15,10));
+            button.setBackground(new Color(54,37,27));
             button.setForeground(Color.white);
+            button.setFont(new Font("Whisky-1670", Font.PLAIN, 14));
             button.setCursor(new Cursor(Cursor.HAND_CURSOR));
             button.setFocusPainted(false);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
-            button.setMaximumSize(new Dimension(100, 40));
+            button.setMaximumSize(new Dimension(110, 40));
             button.addActionListener(e -> this.setUserTerrainType(terrainType));
             this.selectorPanel.add(Box.createVerticalStrut(5));
             this.selectorPanel.add(button);
@@ -153,7 +161,7 @@ public class JBoard extends JPanel {
     public void closeBoard() {
         this.tilePanel.removeAll();
         this.selectorPanel.removeAll();
-        this.tilePanel.setBackground(Color.LIGHT_GRAY);
+        this.tilePanel.setBackground(bgColor);
         this.clearButton.setVisible(false);
         this.okButton.setVisible(false);
         this.tilePanel.revalidate();

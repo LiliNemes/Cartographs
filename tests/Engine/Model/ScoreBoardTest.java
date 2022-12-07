@@ -4,6 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ScoreBoardTest {
+    /**
+     * scoreBoard rendezésének tesztelése.
+     */
     @Test
     public void scoreBoardOrdered() {
         ScoreBoard sb = new ScoreBoard();
@@ -19,6 +22,9 @@ public class ScoreBoardTest {
         Assert.assertEquals("A1", scores.get(3).getName());
     }
 
+    /**
+     * Tesztelése annak, hogy max. 10 bejegyzés lehet a scoreBoardon egy időpillanatban.
+     */
     @Test
     public void scoreBoarLimited() {
         ScoreBoard sb = new ScoreBoard();

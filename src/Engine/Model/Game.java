@@ -69,7 +69,8 @@ public class Game implements IGameEngine, Serializable {
     }
 
     /**
-     * Addig húz, amíg nem ruin kártya jön.
+     * Ruin esetén addig húz, amíg nem rendes kártya jön. Ambush esetén visszatér a kiszámolt, lehelyezendő formával.
+     * @return Kiválasztott mezők ha ambush card-ot húzott.
      */
     @Override
     public PlayerTilesSelection drawNextCard() {

@@ -5,10 +5,12 @@ package Engine.Model;
  */
 public class Sc_CanalLake extends ScoreCardBase {
     public Sc_CanalLake() {
-        super("CanalLake", "Earn six reputation stars \n" +
-                "for each complete row or \n" +
-                "complete column of filled \n" +
-                "spaces.");
+        super("CanalLake", "Earn one reputation star \n" +
+                "for each water space adjacent \n" +
+                "to at least on farm space. \n" +
+                "Earn one reputation star \n" +
+                "for each farm space adjacent \n" +
+                "to at least one water space.");
     }
 
     /**

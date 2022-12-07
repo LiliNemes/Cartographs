@@ -84,6 +84,10 @@ public class CoordinateTest  {
             Assert.assertTrue(actual.get(i).equals(expected.get(i)));
         }
     }
+
+    /**
+     * Van-e közös elemük teszt ha pozitív.
+     */
     @Test
     public void intersectionPositiveTest() {
         var coordinates1 = Coordinate.parseList("1,1;2,2;3,3");
@@ -92,6 +96,9 @@ public class CoordinateTest  {
         Assert.assertTrue(result);
     }
 
+    /**
+     * Van-e közös elemük teszt ha negatív.
+     */
     @Test
     public void intersectionNegativeTest() {
         var coordinates1 = Coordinate.parseList("1,1;2,2;3,3");
@@ -101,6 +108,9 @@ public class CoordinateTest  {
     }
 
 
+    /**
+     * Dupla elemek törlése listábol teszt, ha nincs.
+     */
     @Test
     public void deduplicateNoDuplicates() {
         var list = Coordinate.parseList("0,0;1,1;2,2");
@@ -110,6 +120,9 @@ public class CoordinateTest  {
         Assert.assertTrue(resultList.get(2).equals(new Coordinate(2,2)));
     }
 
+    /**
+     * Dupla elemek törlése listábol teszt, ha van.
+     */
     @Test
     public void deduplicateDuplicates() {
         var list = Coordinate.parseList("0,0;1,1;2,2;2,2;1,1;0,0");
@@ -120,6 +133,9 @@ public class CoordinateTest  {
         Assert.assertTrue(resultList.get(2).equals(new Coordinate(2,2)));
     }
 
+    /**
+     * Kijelölt elemek törlése listából teszt.
+     */
     @Test
     public void removeItems() {
         var list = Coordinate.parseList("0,0;1,1;2,2;3,3;4,4");

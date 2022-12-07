@@ -19,6 +19,7 @@ public class JScoreBlock extends JPanel {
     public JScoreBlock() {
         super(true);
         this.setPreferredSize(new Dimension(160, 100));
+        this.setBackground(new Color(255,238,203));
     }
 
     @Override
@@ -26,9 +27,9 @@ public class JScoreBlock extends JPanel {
 
         super.paintComponent(g);
         Graphics2D gCopy = (Graphics2D) g.create();
-        gCopy.setColor(Color.LIGHT_GRAY);
+        gCopy.setColor(new Color(54,37,27));
         gCopy.fillRoundRect(margin, margin, this.getWidth() - margin * 2, this.getHeight() - margin * 2, 10, 10);
-        gCopy.setColor(Color.BLACK);
+        gCopy.setColor(Color.WHITE);
         drawText(gCopy, "A: " + scoreA, 0, 0);
         drawText(gCopy, "B: " + scoreB, 0.5, 0);
         drawText(gCopy, "G: " + gold, 0, 0.333);
@@ -52,8 +53,9 @@ public class JScoreBlock extends JPanel {
         int yPosition = (int) ((this.getHeight() - margin * 2) * yPosPercent);
         AttributedString str = new AttributedString(text);
         str.addAttribute(TextAttribute.SIZE, fontSize);
+        str.addAttribute(TextAttribute.FONT, new Font("Whisky-1670", Font.PLAIN, 24));
         int colonPosition = text.indexOf(":");
-        str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, 0, colonPosition);
+        str.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR, 0, colonPosition);
         str.addAttribute(TextAttribute.SIZE, fontSize * 0.8, colonPosition, text.length());
         g.drawString(str.getIterator(), margin + xPosition + spacing, margin + yPosition + fontSize);
     }

@@ -27,7 +27,7 @@ public class Sc_Shieldgate extends ScoreCardBase {
             if (b.getRegions(TerrainType.Village).get(i).size() >= biggest) {
                 biggest = b.getRegions(TerrainType.Village).get(i).size();
             }
-            if (b.getRegions(TerrainType.Village).get(i).size() < biggest && b.getRegions(TerrainType.Village).get(i).size() > secondBiggest) {
+            else if (b.getRegions(TerrainType.Village).get(i).size() <= biggest && b.getRegions(TerrainType.Village).get(i).size() > secondBiggest) {
                 secondBiggest = b.getRegions(TerrainType.Village).get(i).size();
             }
         }

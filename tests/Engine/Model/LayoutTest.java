@@ -125,6 +125,9 @@ public class LayoutTest {
         assertTrue(result.isMatch(expected));
     }
 
+    /**
+     * Layout szomszédos mezőiből készített Layout teszt1.
+     */
     @Test
     public void testSurrounding1() {
         var input = Layout.createLayout("0,0;0,1;0,2");
@@ -133,6 +136,9 @@ public class LayoutTest {
         Assert.assertTrue(result.isMatch(expected));
     }
 
+    /**
+     * Layout szomszédos mezőiből készített Layout teszt2.
+     */
     @Test
     public void testSurrounding2() {
         var input = Layout.createLayout("0,0;1,0;2,0");
