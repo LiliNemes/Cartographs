@@ -3,8 +3,8 @@ package Engine.Model;
 import java.io.Serializable;
 
 public class ScoreBoardEntry implements Serializable {
-    private String name;
-    private int points;
+    private final String name;
+    private final int points;
 
     public ScoreBoardEntry(String name, int points) {
         this.name = name;

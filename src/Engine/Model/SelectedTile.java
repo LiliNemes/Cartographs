@@ -4,9 +4,9 @@ package Engine.Model;
  * Egy mező a játéktáblán.
  */
 public class SelectedTile {
-    private int x;
-    private int y;
-    private TerrainType terrainType;
+    private final int x;
+    private final int y;
+    private final TerrainType terrainType;
 
     /**
      * Konstruktor.

@@ -13,10 +13,9 @@ public class DiscoveryCardTest {
 
     /**
      * Nem ad aranyat ha a kártya sem.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void fishingVillageYieldsGold() throws Exception {
+    public void fishingVillageYieldsGold() {
         DiscoveryCard fishingVillage=DiscoveryCardDeck.FishingVillage;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(3, 4, TerrainType.Village);
@@ -28,10 +27,9 @@ public class DiscoveryCardTest {
 
     /**
      * Kártya egyik formájára jól ad aranyat.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void greatRiverAR1YieldsGold() throws Exception {
+    public void greatRiverAR1YieldsGold() {
         DiscoveryCard greatRiver = DiscoveryCardDeck.GreatRiver;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(6,2, TerrainType.Water);
@@ -42,10 +40,9 @@ public class DiscoveryCardTest {
 
     /**
      * Kártya másik formájára jól nem ad aranyat.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void greatRiverAR2YieldsGold() throws Exception {
+    public void greatRiverAR2YieldsGold() {
         DiscoveryCard greatRiver = DiscoveryCardDeck.GreatRiver;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(0, 0, TerrainType.Water);
@@ -58,10 +55,9 @@ public class DiscoveryCardTest {
 
     /**
      * Jó forma, járna érte arany, de rossz típus.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void greatRiverBadTerrainYieldsGold() throws Exception {
+    public void greatRiverBadTerrainYieldsGold() {
         DiscoveryCard greatRiver = DiscoveryCardDeck.GreatRiver;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(6,2, TerrainType.Farm);
@@ -72,10 +68,9 @@ public class DiscoveryCardTest {
 
     /**
      * Jó lerakást ellenőriz.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void checkHamlet() throws Exception {
+    public void checkHamlet() {
         DiscoveryCard hamlet = DiscoveryCardDeck.Hamlet;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(3,2, TerrainType.Village);
@@ -86,10 +81,9 @@ public class DiscoveryCardTest {
 
     /**
      * Nem azonos a mezők típusa lerakásra check.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void checkHomestead() throws Exception {
+    public void checkHomestead() {
         DiscoveryCard homestead = DiscoveryCardDeck.Homestead;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(3,2, TerrainType.Village);
@@ -101,10 +95,9 @@ public class DiscoveryCardTest {
 
     /**
      * Rossz lerakás check.
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void checkForgottenForest() throws Exception {
+    public void checkForgottenForest() {
         DiscoveryCard forgottenForest = DiscoveryCardDeck.ForgottenForest;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(2, 3, TerrainType.Forest);
@@ -114,10 +107,9 @@ public class DiscoveryCardTest {
 
     /**
      * Rossz terrain check
-     * @throws Exception nem jó kitöltés.
      */
     @Test
-    public void checkOrchard() throws Exception {
+    public void checkOrchard() {
         DiscoveryCard orchard = DiscoveryCardDeck.Orchard;
         PlayerTilesSelection ps= new PlayerTilesSelection();
         ps.addTile(2, 3, TerrainType.Village);

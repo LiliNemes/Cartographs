@@ -1,32 +1,24 @@
 package Engine.Model;
 
+/**
+ * Visszaadja, hogy sikeres-e egy execution (ValidationResult), illetve hogy évszak ért-e véget vele, melyik évszakban történt.
+ */
 public class ExecutionSeasonResult {
-
 
     ValidationResult vr;
 
-    public int getA() {
-        return a;
-    }
-
-    public int getB() {
-        return b;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public int getMonster() { return monster; }
-
-    int a;
-    int b;
-    int money;
-    int monster;
+    /**
+     *
+     * @return Melyik évszakban történt.
+     */
     public Seasons getSeason() {
         return season;
     }
 
+    /**
+     *
+     * @return true ha ezzel véget ért az évszak, false ha nem.
+     */
     public boolean isEndOfSeason() {
         return endOfSeason;
     }
@@ -34,15 +26,22 @@ public class ExecutionSeasonResult {
     boolean endOfSeason;
     Seasons season;
 
-    public ExecutionSeasonResult(ValidationResult v, boolean e, int one, int two, int m, int monster, Seasons s) {
+    /**
+     * Konstruktor.
+     * @param v ValidationResult
+     * @param e Vége van-e az évszaknak.
+     * @param s Az adott évszak.
+     */
+    public ExecutionSeasonResult(ValidationResult v, boolean e,  Seasons s) {
         this.vr=v;
-        this.a=one;
-        this.b=two;
         this.season=s;
         this.endOfSeason=e;
-        this.money=m;
-        this.monster = monster;
     }
+
+    /**
+     *
+     * @return  sikeres-e egy execution.
+     */
     public ValidationResult getVr() {
         return vr;
     }

@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_GreenboughTest {
 
     Sc_Greenbough greenbough;
@@ -18,10 +16,9 @@ public class Sc_GreenboughTest {
 
     /**
      * Greenbough küldetéskártya teszt ha van szerzett pont.
-     * @throws Exception Nem jó a mező kitöltése.
      */
     @Test
-    public void GreenboughTest1() throws Exception{
+    public void GreenboughTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Forest);
@@ -34,10 +31,9 @@ public class Sc_GreenboughTest {
 
     /**
      * Greenbough küldetéskártya teszt ha van szerzett pont.
-     * @throws Exception Nem jó a mező kitöltése.
      */
     @Test
-    public void GreenboughTest2() throws Exception {
+    public void GreenboughTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Water);

@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Felfedező kártyák megvalósításában segítő osztály,
  */
 public class DiscoveryCardBase implements Serializable {
-    private DiscoveryCardType cardType;
-    private String name;
+    private final DiscoveryCardType cardType;
+    private final String name;
 
     /**
      * Konstruktor.

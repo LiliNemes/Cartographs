@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_TheBrokenRoadTest {
     Sc_TheBrokenRoad theBrokenRoad;
     Board board;
@@ -17,10 +15,9 @@ public class Sc_TheBrokenRoadTest {
 
     /**
      * TheBrokenRoad küldetéskártya teszt ha van pont.
-     * @throws Exception Rossz a kitöltés értéke.
      */
     @Test
-    public void TheBrokenRoadTest1() throws Exception {
+    public void TheBrokenRoadTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);
@@ -34,10 +31,9 @@ public class Sc_TheBrokenRoadTest {
 
     /**
      * TheBrokenRoad küldetéskártya teszt ha nincs pont.
-     * @throws Exception Rossz a kitöltés értéke.
      */
     @Test
-    public void TheBrokenRoadTest2() throws Exception {
+    public void TheBrokenRoadTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);

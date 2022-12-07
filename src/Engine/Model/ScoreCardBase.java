@@ -3,8 +3,8 @@ package Engine.Model;
 import java.io.Serializable;
 
 public class ScoreCardBase implements Serializable {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
     public ScoreCardBase(String s, String desc) {
         name=s;
         description=desc;

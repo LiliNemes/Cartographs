@@ -8,7 +8,7 @@ import java.util.List;
  * tartalmazó osztály.
  */
 public class PlayerTilesSelection {
-    private ArrayList<SelectedTile> selectedTiles;
+    private final ArrayList<SelectedTile> selectedTiles;
 
     private static final List<TerrainType> VALID_TERRAIN_TYPES = List.of(TerrainType.Farm,
                                                                        TerrainType.Forest,
@@ -19,7 +19,7 @@ public class PlayerTilesSelection {
      * Konstruktor.
      */
     public PlayerTilesSelection() {
-        selectedTiles = new ArrayList<SelectedTile>();
+        selectedTiles = new ArrayList<>();
     }
 
     /**
@@ -34,7 +34,6 @@ public class PlayerTilesSelection {
      * @param x Az új mező x koordinátája.
      * @param y Az új mező y koordinátája.
      * @param terrainType Az új mező kiválasztott kitöltési értéke.
-     * @throws Exception
      */
     public void addTile(int x, int y, TerrainType terrainType) {
         if (!VALID_TERRAIN_TYPES.contains(terrainType)) {
@@ -70,9 +69,8 @@ public class PlayerTilesSelection {
         if (selectedTiles.size() == 0) {
             return null;
         }
-        List<Coordinate> coordinates = new ArrayList<>();
-        for(int i=0; i< selectedTiles.size(); i++) {
-            SelectedTile tile = selectedTiles.get(i);
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
+        for (SelectedTile tile : selectedTiles) {
             coordinates.add(new Coordinate(tile.getX(), tile.getY()));
         }
         Layout ret = new Layout(coordinates);
@@ -95,8 +93,8 @@ public class PlayerTilesSelection {
      */
     public boolean areAllTerrainsSame() {
         TerrainType terrain = this.selectedTiles.get(0).getTerrainType();
-        for(int i=0; i<this.selectedTiles.size(); i++) {
-            if(this.selectedTiles.get(i).getTerrainType()!= terrain)
+        for (SelectedTile selectedTile : this.selectedTiles) {
+            if (selectedTile.getTerrainType() != terrain)
                 return false;
         }
         return true;
@@ -109,8 +107,7 @@ public class PlayerTilesSelection {
      * @return A mező ami a megadott koordinátákkal rendelkezik, null ha nincs ilyen.
      */
     private SelectedTile GetTileByCoordinates(int x, int y) {
-        for (int i = 0; i < selectedTiles.size(); i++) {
-            SelectedTile tile = selectedTiles.get(i);
+        for (SelectedTile tile : selectedTiles) {
             if (tile.getX() == x && tile.getY() == y) {
                 return tile;
             }
@@ -118,7 +115,7 @@ public class PlayerTilesSelection {
         return null;
     }
 
-    //TODO
+    //TODO - not used
     public void ClearAll() {
         selectedTiles.clear();
     }

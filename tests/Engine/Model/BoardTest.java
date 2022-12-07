@@ -140,7 +140,7 @@ public class BoardTest {
         expected.add(new Coordinate(0,0));
         assertEquals(expected.size(), actual.size());
        for(int i=0; i< actual.size(); i++) {
-           assertTrue(expected.get(i).isEqualTo(actual.get(i)));
+           assertTrue(expected.get(i).equals(actual.get(i)));
        }
     }
 
@@ -176,7 +176,7 @@ public class BoardTest {
         expected.add(new Coordinate(0, 1));
         assertEquals(expected.size(), actual.size());
         for(int i=0; i< actual.size(); i++) {
-            assertTrue(expected.get(i).isEqualTo( actual.get(i)));
+            assertTrue(expected.get(i).equals( actual.get(i)));
         }
     }
 
@@ -203,7 +203,7 @@ public class BoardTest {
         for(int i=0; i< actual.size(); i++) {
             assertEquals(expected.get(i).size(), actual.get(i).size());
             for(int j=0; j<actual.get(i).size(); j++) {
-                assertTrue(expected.get(i).get(j).isEqualTo(actual.get(i).get(j)));
+                assertTrue(expected.get(i).get(j).equals(actual.get(i).get(j)));
             }
         }
     }
@@ -252,7 +252,7 @@ public class BoardTest {
         for(int i=0; i< actual.size(); i++) {
             assertEquals(expected.get(i).size(), actual.get(i).size());
             for(int j=0; j<actual.get(i).size(); j++) {
-                assertTrue(expected.get(i).get(j).isEqualTo(actual.get(i).get(j)));
+                assertTrue(expected.get(i).get(j).equals(actual.get(i).get(j)));
             }
         }
     }

@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_GreatCityTest {
     Sc_GreatCity greatCity;
     Board board;
@@ -17,10 +15,9 @@ public class Sc_GreatCityTest {
 
     /**
      * GreatCity küldetéskártya teszt ha van pont.
-     * @throws Exception Rossz a kitöltés értéke.
      */
     @Test
-    public void GreatCityTest1() throws Exception {
+    public void GreatCityTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);
@@ -34,10 +31,9 @@ public class Sc_GreatCityTest {
 
     /**
      * GreatCity küldetéskártya teszt ha nincs pont.
-     * @throws Exception Rossz a kitöltés értéke.
      */
     @Test
-    public void GreatCityTest2() throws Exception {
+    public void GreatCityTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);

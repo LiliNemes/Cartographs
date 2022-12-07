@@ -4,45 +4,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  A Great City küldetéskártyát reprezentáló osztály.
+ * A Great City küldetéskártyát reprezentáló osztály.
  */
-public class Sc_GreatCity extends ScoreCardBase{
+public class Sc_GreatCity extends ScoreCardBase {
     public Sc_GreatCity() {
-        super("GreatCity", "Earn one reputation \n" +
-                "star for each village space in \n" +
+        super("GreatCity", "Earn one reputation star \n" +
+                "for each village space in \n" +
                 "the largest cluster of village \n" +
-                "spaces that is not adjacent to a \n" +
-                "mountain space");
+                "spaces that is not adjacent \n" +
+                "to a mountain space.");
     }
 
     /**
      * A legnagyobb heggyel nem szomszédos falurégió minden mezőjéért 1 pontot ad.
+     *
      * @param sheet A pontozandó lap.
      * @return A pontok száma.
      */
     @Override
     public int score(PlayerSheet sheet) {
-        int points=0;
-        Board b=sheet.getBoard();
+        int points;
+        Board b = sheet.getBoard();
         List<List<Coordinate>> noMountains = new ArrayList<>();
-        for(int i=0; i<b.getRegions(TerrainType.Village).size(); i++) {
+        for (int i = 0; i < b.getRegions(TerrainType.Village).size(); i++) {
             boolean inIt = false;
-            for(int j=0; j<b.getRegions(TerrainType.Village).get(i).size(); j++) {
+            for (int j = 0; j < b.getRegions(TerrainType.Village).get(i).size(); j++) {
                 List<TerrainType> neighbourTerrains = b.getNeighboursTerrainType(b.getRegions(TerrainType.Village).get(i).get(j));
-                for(int n=0; n< neighbourTerrains.size(); n++) {
-                    if(neighbourTerrains.get(n)==TerrainType.Mountain)
+                for (TerrainType neighbourTerrain : neighbourTerrains) {
+                    if (neighbourTerrain == TerrainType.Mountain) {
                         inIt = true;
+                        break;
+                    }
                 }
             }
-            if(!inIt)
-                noMountains.add(b.getRegions(TerrainType.Village).get(i));
+            if (!inIt) noMountains.add(b.getRegions(TerrainType.Village).get(i));
         }
-        int biggest=0;
-        for(int i=0; i< noMountains.size(); i++) {
-            if(noMountains.get(i).size()>biggest)
-                biggest=noMountains.get(i).size();
+        int biggest = 0;
+        for (List<Coordinate> noMountain : noMountains) {
+            if (noMountain.size() > biggest) biggest = noMountain.size();
         }
-        points=biggest;
+        points = biggest;
         return points;
     }
 }

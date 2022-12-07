@@ -1,6 +1,5 @@
 package Engine.Model;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +15,9 @@ public class Sc_ShieldgateTest {
 
     /**
      * Shieldgate küldetéskártya teszt ha van pont.
-     * @throws Exception Rossz a kitöltés értéke.
      */
     @Test
-    public void ShieldgateTest1() throws Exception {
+    public void ShieldgateTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);
@@ -33,10 +31,9 @@ public class Sc_ShieldgateTest {
 
     /**
      * Shieldgate küldetéskártya teszt ha nincs pont.
-     * @throws Exception Rossz a kitöltés értéke.
      */
     @Test
-    public void ShieldgateTest2() throws Exception {
+    public void ShieldgateTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);

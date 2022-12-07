@@ -17,10 +17,9 @@ public class Sc_BorderlandsTest {
 
     /**
      * Borderlands küldetéskártya teszt ha van megszerzett pont.
-     * @throws Exception invalid kijelölt típus.
      */
     @Test
-    public void BorderlandsTest1() throws Exception {
+    public void BorderlandsTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Water);
         ps.addTile(0, 0, TerrainType.Water);
@@ -33,10 +32,9 @@ public class Sc_BorderlandsTest {
 
     /**
      * Borderlands küldetéskártya teszt ha nincs megszerzett pont.
-     * @throws Exception invalid kijelölt típus.
      */
     @Test
-    public void BorderlandsTest2() throws Exception {
+    public void BorderlandsTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(2, 1, TerrainType.Farm);

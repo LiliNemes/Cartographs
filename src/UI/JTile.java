@@ -4,12 +4,10 @@ import Engine.Model.TerrainType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class JTile extends JButton {
 
-    private ImageBank tileImages;
+    private final ImageBank tileImages;
     private TerrainType originalTerrainType;
     private boolean hasRuin;
 
@@ -25,15 +23,12 @@ public class JTile extends JButton {
         this.userTerrainType = TerrainType.Empty;
         this.isSelected = false;
         this.setPreferredSize(new Dimension(30, 30));
-        this.addActionListener(a -> {
-            this.toggleTile();
-        });
+        this.addActionListener(a -> this.toggleTile());
     }
 
     private void toggleTile() {
         //cannot click on non-empty field
-        if (this.originalTerrainType != TerrainType.Empty || isMonsterMode)
-            return;
+        if (this.originalTerrainType != TerrainType.Empty || isMonsterMode) return;
         this.isSelected = !this.isSelected;
         this.revalidate();
         this.repaint();
@@ -44,8 +39,7 @@ public class JTile extends JButton {
         this.isMonsterMode = isMonsterMode;
         this.isSelected = false;
 
-        if (this.originalTerrainType == terrainType && this.hasRuin == hasRuin)
-            return;
+        if (this.originalTerrainType == terrainType && this.hasRuin == hasRuin) return;
         this.originalTerrainType = terrainType;
         this.hasRuin = hasRuin;
         this.revalidate();
@@ -82,15 +76,13 @@ public class JTile extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D gCopy = (Graphics2D)g.create();
+        Graphics2D gCopy = (Graphics2D) g.create();
         if (isSelected) {
             drawTerrainType(gCopy, this.userTerrainType, this.hasRuin);
             gCopy.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
             gCopy.setColor(Color.LIGHT_GRAY);
-            gCopy.fillRect(0,0, this.getWidth(), this.getHeight());
-        }
-        else
-        {
+            gCopy.fillRect(0, 0, this.getWidth(), this.getHeight());
+        } else {
             drawTerrainType(gCopy, this.originalTerrainType, this.hasRuin);
         }
         gCopy.dispose();
@@ -100,9 +92,8 @@ public class JTile extends JButton {
 
         if (terrainType == TerrainType.Rift) {
             g.setColor(Color.BLACK);
-            g.fillRect(0,0, this.getWidth(), this.getHeight());
-        }
-        else {
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        } else {
             String imageName = terrainType.name().toLowerCase();
             if (hasRuin) {
                 imageName += "ruin";

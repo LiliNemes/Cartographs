@@ -1,8 +1,8 @@
 package UI;
 
 public class ScoreCardInfo {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
 
     public ScoreCardInfo(String name, String description) {
         this.name = name;

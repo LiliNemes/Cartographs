@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_GreengoldPlainsTest {
     Sc_GreengoldPlains greengoldPlains;
     Board board;
@@ -17,10 +15,9 @@ public class Sc_GreengoldPlainsTest {
 
     /**
      * Greengold Plains küldetéskártya teszt ha van szerzett pont.
-     * @throws Exception Ha a kitöltés típusa rossz.
      */
     @Test
-    public void GreengoldPlainsTest1() throws Exception{
+    public void GreengoldPlainsTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);
@@ -38,10 +35,9 @@ public class Sc_GreengoldPlainsTest {
 
     /**
      * Greengold Plains küldetéskártya teszt ha nincs szerzett pont.
-     * @throws Exception Ha a kitöltés típusa rossz.
      */
     @Test
-    public void GreengoldPlainsTest2() throws Exception{
+    public void GreengoldPlainsTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Village);
         ps.addTile(0, 0, TerrainType.Village);

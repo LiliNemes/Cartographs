@@ -7,7 +7,7 @@ import java.util.EventObject;
 
 public class UserOkEvent extends EventObject {
 
-    private PlayerTilesSelection playerTilesSelection;
+    private final PlayerTilesSelection playerTilesSelection;
     public UserOkEvent(Object source, PlayerTilesSelection playerTilesSelection) {
         super(source);
         this.playerTilesSelection = playerTilesSelection;
@@ -19,6 +19,6 @@ public class UserOkEvent extends EventObject {
 }
 
 interface UserOkEventListener extends EventListener {
-    public void userOkEventOccurred(UserOkEvent event);
+    void userOkEventOccurred(UserOkEvent event);
 }
 

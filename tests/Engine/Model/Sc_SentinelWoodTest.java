@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_SentinelWoodTest {
     Sc_SentinelWood sentinelWood;
     Board board;
@@ -17,10 +15,9 @@ public class Sc_SentinelWoodTest {
 
     /**
      * Sentinel Wood küldetéskártya teszt ha van szerzett pont.
-     * @throws Exception Nem jó a mező kitöltése.
      */
     @Test
-    public void sentinelWoodTest1() throws Exception{
+    public void sentinelWoodTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Forest);
@@ -33,10 +30,9 @@ public class Sc_SentinelWoodTest {
 
     /**
      * Sentinel Wood küldetéskártya teszt ha nincs szerzett pont.
-     * @throws Exception Nem jó a mező kitöltése.
      */
     @Test
-    public void sentinelWoodTest2() throws Exception{
+    public void sentinelWoodTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Water);

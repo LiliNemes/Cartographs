@@ -28,7 +28,6 @@ public class PlayerTilesSelectionTest {
 
     /**
      * Mező hozzáadása invalid kitöltéssel.
-     * @throws Exception ha nem jó a típus.
      */
     @Test(expected = RuntimeException.class)
     public void invalidTerrainTypeThrowsException() {
@@ -46,10 +45,9 @@ public class PlayerTilesSelectionTest {
     }
     /**
      * Ellenőrzi, hogy működik-e a vetítéssel forma létrehozása.
-     * @throws Exception ha nem jó a típus.
      */
     @Test
-    public void getLayoutTest() throws Exception {
+    public void getLayoutTest() {
         selection.addTile(5, 5, TerrainType.Farm);
         selection.addTile(6, 5, TerrainType.Farm);
         selection.addTile(7, 5, TerrainType.Farm);
@@ -60,10 +58,9 @@ public class PlayerTilesSelectionTest {
 
     /**
      * allAreSame nem jó értékkel.
-     * @throws Exception ha nem jó a típus.
      */
     @Test
-    public void allAreSameNotOK() throws Exception {
+    public void allAreSameNotOK() {
         selection.addTile(5,4, TerrainType.Farm);
         selection.addTile(5, 5, TerrainType.Forest);
         assertFalse(this.selection.areAllTerrainsSame());
@@ -71,10 +68,9 @@ public class PlayerTilesSelectionTest {
 
     /**
      * allAreSame jó értékekkel.
-     * @throws Exception ha nem jó a típus.
      */
     @Test
-    public void allAreSameOK() throws Exception {
+    public void allAreSameOK() {
         selection.addTile(5,4, TerrainType.Farm);
         selection.addTile(5, 5, TerrainType.Farm);
         assertTrue(this.selection.areAllTerrainsSame());

@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_MagesValleyTest {
     Sc_MagesValley magesValley;
     Board board;
@@ -17,10 +15,9 @@ public class Sc_MagesValleyTest {
 
     /**
      * Mages Valley küldetéskártya teszt ha van szerzett pont.
-     * @throws Exception Nem jó a mező kitöltése.
      */
     @Test
-    public void MagesValleyTest1() throws Exception{
+    public void MagesValleyTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Forest);
@@ -35,10 +32,9 @@ public class Sc_MagesValleyTest {
 
     /**
      * Mages Valley küldetéskártya teszt ha nincs szerzett pont.
-     * @throws Exception Nem jó a mező kitöltése.
      */
     @Test
-    public void MagesValleyTest2() throws Exception{
+    public void MagesValleyTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 0, TerrainType.Farm);
         ps.addTile(0, 2, TerrainType.Forest);

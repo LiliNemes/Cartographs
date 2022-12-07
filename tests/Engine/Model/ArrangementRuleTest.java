@@ -10,10 +10,9 @@ public class ArrangementRuleTest {
 
     /**
      * Ugyanaz az alakzat forgatás nélkül check
-     * @throws Exception
      */
     @Test
-    public void testSameLayoutNoRotation() throws Exception {
+    public void testSameLayoutNoRotation() {
         ArrangementRule rule = ArrangementRuleFactory.buildBasedOn(Layout.createLayout("0,0;1,0;2,0"), false);
         PlayerTilesSelection selection = new PlayerTilesSelection();
         selection.addTile(5, 5, TerrainType.Farm);
@@ -26,10 +25,9 @@ public class ArrangementRuleTest {
 
     /**
      * Rossz alakzat check.
-     * @throws Exception
      */
     @Test
-    public void testDifferentLayout() throws Exception {
+    public void testDifferentLayout() {
         ArrangementRule rule = ArrangementRuleFactory.buildBasedOn(Layout.createLayout("0,0;1,0;2,0"), false);
         PlayerTilesSelection selection = new PlayerTilesSelection();
         selection.addTile(5, 5, TerrainType.Farm);
@@ -42,10 +40,9 @@ public class ArrangementRuleTest {
 
     /**
      * Elforgatott alakzat check.
-     * @throws Exception
      */
     @Test
-    public void testTurnedLayout() throws Exception {
+    public void testTurnedLayout() {
         ArrangementRule rule = ArrangementRuleFactory.buildBasedOn(Layout.createLayout("0,0;0,1;0,2;1,1"), false);
         PlayerTilesSelection selection = new PlayerTilesSelection();
         selection.addTile(7, 3, TerrainType.Farm);
@@ -59,10 +56,9 @@ public class ArrangementRuleTest {
 
     /**
      * Tükrözött alakzat check.
-     * @throws Exception
      */
     @Test
-    public void mirroredTurnedLayout() throws Exception {
+    public void mirroredTurnedLayout() {
         ArrangementRule rule = ArrangementRuleFactory.buildBasedOn(Layout.createLayout("0,0;0,1;1,1;1,2"), false);
         PlayerTilesSelection selection = new PlayerTilesSelection();
         selection.addTile(7, 3, TerrainType.Farm);

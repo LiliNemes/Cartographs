@@ -18,10 +18,9 @@ public class PlayerSheetTest {
 
     /**
      * A forgottenForest DiscoveryCardra jó lerakás ellenőrzése.
-     * @throws Exception ha rossz kitöltés.
      */
     @Test
-    public void forgottenForestOK() throws Exception {
+    public void forgottenForestOK() {
         DiscoveryCard forgottenForest=DiscoveryCardDeck.ForgottenForest;
         ps.addTile(1, 0, TerrainType.Forest);
         ps.addTile(2, 1, TerrainType.Forest);
@@ -31,10 +30,9 @@ public class PlayerSheetTest {
 
     /**
      * A forgottenForest DiscoveryCardra a kártya miatt nem jó lerakás ellenőrzése.
-     * @throws Exception ha rossz kitöltés.
      */
     @Test
-    public void forgottenForestCardNotOK() throws Exception {
+    public void forgottenForestCardNotOK() {
         DiscoveryCard forgottenForest=DiscoveryCardDeck.ForgottenForest;
         ps.addTile(1, 0, TerrainType.Water);
         ps.addTile(2, 1, TerrainType.Water);
@@ -44,10 +42,9 @@ public class PlayerSheetTest {
 
     /**
      * A forgottenForest DiscoveryCardra a játéktábla miatt nem jó lerakás ellenőrzése.
-     * @throws Exception ha rossz kitöltés.
      */
     @Test
-    public void forgottenForestBoardNotOK() throws Exception {
+    public void forgottenForestBoardNotOK()  {
         DiscoveryCard forgottenForest=DiscoveryCardDeck.ForgottenForest;
         ps.addTile(1, 1, TerrainType.Forest);
         ps.addTile(2, 2, TerrainType.Forest);
@@ -57,7 +54,6 @@ public class PlayerSheetTest {
 
     /**
      * A forgottenForest DiscoveryCardra execute, ha pénz is jár érte.
-     * @throws Exception ha rossz kitöltés.
      */
     @Test
     public void forgottenForestexecuteOKGold() {
@@ -71,7 +67,6 @@ public class PlayerSheetTest {
 
     /**
      * A forgottenForest DiscoveryCardra execute, ha pénz nem jár érte.
-     * @throws Exception ha rossz kitöltés.s
      */
     @Test
     public void forgottenForestExecuteNoGold() {

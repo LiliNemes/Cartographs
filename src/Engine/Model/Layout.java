@@ -8,7 +8,7 @@ import java.util.List;
  * Koordinátákból álló forma,
  */
 public class Layout implements Serializable {
-    private List<Coordinate> coordinates;
+    private final List<Coordinate> coordinates;
 
     /**
      * Létrehoz egy Layoutot.
@@ -50,26 +50,21 @@ public class Layout implements Serializable {
     public Layout turn90degrees(int times) {
         int biggestX=this.coordinates.get(0).getX();
         int biggestY=this.coordinates.get(0).getY();
-        for(int i=0; i<this.coordinates.size(); i++) {
-            if(this.coordinates.get(i).getX()>biggestX)
-                biggestX=this.coordinates.get(i).getX();
-            if(this.coordinates.get(i).getY()>biggestY)
-                biggestY=this.coordinates.get(i).getY();
+        for (Coordinate coordinate : this.coordinates) {
+            if (coordinate.getX() > biggestX)
+                biggestX = coordinate.getX();
+            if (coordinate.getY() > biggestY)
+                biggestY = coordinate.getY();
         }
-        int param;
-        if(biggestX>biggestY)
-            param=biggestX;
-        else {
-            param=biggestY;
-        }
+        int param = Math.max(biggestX, biggestY);
         List<Coordinate> turnedCoordinates = new ArrayList<>();
-        for (int i=0; i<this.coordinates.size(); i++) {
-            int x=this.coordinates.get(i).getY();
-            int y=(-1 * this.coordinates.get(i).getX()) + param;
-            for (int j=0; j<times-1; j++) {
+        for (Coordinate coordinate : this.coordinates) {
+            int x = coordinate.getY();
+            int y = (-1 * coordinate.getX()) + param;
+            for (int j = 0; j < times - 1; j++) {
                 int p = x;
-                x=y;
-                y=(p*-1)+param;
+                x = y;
+                y = (p * -1) + param;
             }
             Coordinate turned = new Coordinate(x, y);
             turnedCoordinates.add(turned);
@@ -86,21 +81,20 @@ public class Layout implements Serializable {
     public Layout project() {
         int smallestX=this.coordinates.get(0).getX();
         int smallestY=this.coordinates.get(0).getY();
-        for(int i=0; i<this.coordinates.size(); i++) {
-            if(this.coordinates.get(i).getX()<smallestX)
-                smallestX=this.coordinates.get(i).getX();
-            if(this.coordinates.get(i).getY()<smallestY)
-                smallestY=this.coordinates.get(i).getY();
+        for (Coordinate coordinate : this.coordinates) {
+            if (coordinate.getX() < smallestX)
+                smallestX = coordinate.getX();
+            if (coordinate.getY() < smallestY)
+                smallestY = coordinate.getY();
         }
         List<Coordinate> projectedCoordinates = new ArrayList<>();
-        for(int i=0; i<this.coordinates.size(); i++) {
-            int x=this.coordinates.get(i).getX()-smallestX;
-            int y=this.coordinates.get(i).getY()-smallestY;
-            Coordinate c=new Coordinate(x, y);
+        for (Coordinate coordinate : this.coordinates) {
+            int x = coordinate.getX() - smallestX;
+            int y = coordinate.getY() - smallestY;
+            Coordinate c = new Coordinate(x, y);
             projectedCoordinates.add(c);
         }
-        Layout projected= new Layout(projectedCoordinates);
-        return projected;
+        return new Layout(projectedCoordinates);
     }
 
     /**
@@ -109,14 +103,14 @@ public class Layout implements Serializable {
      */
     public Layout mirror() {
         int biggestX=this.coordinates.get(0).getX();
-        for(int i=0; i<this.coordinates.size(); i++) {
-            if(this.coordinates.get(i).getX()>biggestX)
-                biggestX=this.coordinates.get(i).getX();
+        for (Coordinate coordinate : this.coordinates) {
+            if (coordinate.getX() > biggestX)
+                biggestX = coordinate.getX();
         }
         List<Coordinate> mirroredCoordinates = new ArrayList<>();
-        for(int i=0; i<this.coordinates.size(); i++) {
-            int x = biggestX - this.coordinates.get(i).getX();
-            Coordinate c = new Coordinate(x, this.coordinates.get(i).getY());
+        for (Coordinate coordinate : this.coordinates) {
+            int x = biggestX - coordinate.getX();
+            Coordinate c = new Coordinate(x, coordinate.getY());
             mirroredCoordinates.add(c);
         }
         Layout mirrored = new Layout(mirroredCoordinates);
@@ -126,12 +120,11 @@ public class Layout implements Serializable {
 
     public Layout surroundings() {
         List<Coordinate> surroundingCoordinates = new ArrayList<>();
-        for (int i=0; i<this.coordinates.size(); i++) {
-            var coordinate = this.coordinates.get(i);
-            surroundingCoordinates.add(coordinate.offset(1,0));
-            surroundingCoordinates.add(coordinate.offset(-1,0));
-            surroundingCoordinates.add(coordinate.offset(0,1));
-            surroundingCoordinates.add(coordinate.offset(0,-1));
+        for (Coordinate coordinate : this.coordinates) {
+            surroundingCoordinates.add(coordinate.offset(1, 0));
+            surroundingCoordinates.add(coordinate.offset(-1, 0));
+            surroundingCoordinates.add(coordinate.offset(0, 1));
+            surroundingCoordinates.add(coordinate.offset(0, -1));
         }
         List<Coordinate> noDuplicates = Coordinate.removeDuplicates(surroundingCoordinates);
         List<Coordinate> cleansed = Coordinate.removeCoordinates(noDuplicates, this.coordinates);
@@ -152,8 +145,8 @@ public class Layout implements Serializable {
      * @return True ha igen, false ha nem.
      */
     private boolean hasCoordinate(Coordinate coordinate) {
-        for (int i = 0; i < coordinates.size(); i++) {
-            if (coordinates.get(i).isEqualTo(coordinate)) return true;
+        for (Coordinate value : coordinates) {
+            if (value.equals(coordinate)) return true;
         }
         return false;
     }

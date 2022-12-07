@@ -5,11 +5,22 @@ import Engine.Model.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Magát a játékot felépítő osztály.
+ */
 public class GameFactory {
 
     public static GameFactory Instance = new GameFactory();
 
-    public Game createSolitaireGame(String playerName, boolean isHard) {
+    /**
+     * Létrehoz egy játékot. Előre elkészíti és megkeveri évszakonként a DiscoveryCardDeck-eket, kihúzza az évszakokra
+     * érvényes scoreCard-okat, elkészíti a játékpályét.
+     * @param playerName A játékos által megadható név (ScoreBoard miatt fontos).
+     * @param isHard A játékpálya létrehozása miatt szükséges, tőle függ melyik pályalétrehozó függvényt híja a függvény (sima vagy szakadékokkal nehezített).
+     * @param random A játékpálya létrehozásához szükséges, előre elkészített fix pálya legyeb-e vagy random.
+     * @return A létrehozott, felépített játék.
+     */
+    public Game createSolitaireGame(String playerName, boolean isHard, boolean random) {
 
         Map<Seasons, DiscoveryCardDeck> discoveryCardDecks = new HashMap<>();
 
@@ -27,22 +38,22 @@ public class GameFactory {
         seasonTimes.put(Seasons.winter, 6);
 
         //4 x ScoreCardBase lista tipusonként egy
-        Sc_SentinelWood sw=new Sc_SentinelWood();
-        Sc_CanalLake cl=new Sc_CanalLake();
-        Sc_Borderlands b=new Sc_Borderlands();
-        Sc_Wildholds w=new Sc_Wildholds();
-        Sc_Shieldgate s=new Sc_Shieldgate();
-        Sc_GreengoldPlains gp= new Sc_GreengoldPlains();
-        Sc_GreatCity gc=new Sc_GreatCity();
-        Sc_Greenbough g=new Sc_Greenbough();
-        Sc_Treetower t=new Sc_Treetower();
-        Sc_TheCauldrons tc=new Sc_TheCauldrons();
-        Sc_MagesValley mv=new Sc_MagesValley();
-        Sc_TheBrokenRoad tbr=new Sc_TheBrokenRoad();
-        List<ScoreCardBase> type1=new ArrayList<>(List.of(sw, g, t));
-        List<ScoreCardBase> type2=new ArrayList<>(List.of(cl, mv));
-        List<ScoreCardBase> type3=new ArrayList<>(List.of(b, tc, tbr));
-        List<ScoreCardBase> type4=new ArrayList<>(List.of(w, s, gp, gc));
+        Sc_SentinelWood sw = new Sc_SentinelWood();
+        Sc_CanalLake cl = new Sc_CanalLake();
+        Sc_Borderlands b = new Sc_Borderlands();
+        Sc_Wildholds w = new Sc_Wildholds();
+        Sc_Shieldgate s = new Sc_Shieldgate();
+        Sc_GreengoldPlains gp = new Sc_GreengoldPlains();
+        Sc_GreatCity gc = new Sc_GreatCity();
+        Sc_Greenbough g = new Sc_Greenbough();
+        Sc_Treetower t = new Sc_Treetower();
+        Sc_TheCauldrons tc = new Sc_TheCauldrons();
+        Sc_MagesValley mv = new Sc_MagesValley();
+        Sc_TheBrokenRoad tbr = new Sc_TheBrokenRoad();
+        List<ScoreCardBase> type1 = new ArrayList<>(List.of(sw, g, t));
+        List<ScoreCardBase> type2 = new ArrayList<>(List.of(cl, mv));
+        List<ScoreCardBase> type3 = new ArrayList<>(List.of(b, tc, tbr));
+        List<ScoreCardBase> type4 = new ArrayList<>(List.of(w, s, gp, gc));
 
         //megkever
         Collections.shuffle(type1);
@@ -77,13 +88,18 @@ public class GameFactory {
         scoreCards.put(Seasons.autumn, chosenCardsAutumn);
         scoreCards.put(Seasons.winter, chosenCardsWinter);
 
-        Board board = isHard ? BoardDeck.createHardBoard() : BoardDeck.createBoard();
-        return new Game(new PlayerSheet(playerName, board), discoveryCardDecks, ambushDeck ,scoreCards, seasonTimes);
+        Board board = isHard ? BoardDeck.createHardBoard(random) : BoardDeck.createBoard(random);
+        return new Game(new PlayerSheet(playerName, board), discoveryCardDecks, scoreCards, seasonTimes);
     }
 
+    /**
+     * Függvény a játék mentéséhez, file-ba írásához.
+     * @param fileName Mi legyen a file neve.
+     * @param game A játék amit el kell menteni.
+     */
     public void saveGame(String fileName, Game game) {
         try {
-            FileOutputStream f = new FileOutputStream(new File(fileName));
+            FileOutputStream f = new FileOutputStream(fileName);
             ObjectOutputStream o = new ObjectOutputStream(f);
             o.writeObject(game);
             o.close();
@@ -93,17 +109,20 @@ public class GameFactory {
         }
     }
 
+    /**
+     * Függvény mentett játék betöltéséhez, fileból.
+     * @param fileName A beolvasandó file neve.
+     * @return A beolvasott játék.
+     */
     public Game loadGame(String fileName) {
         try {
-            FileInputStream f = new FileInputStream(new File(fileName));
-            ObjectInputStream  o = new ObjectInputStream (f);
-            var game = (Game)o.readObject();
+            FileInputStream f = new FileInputStream(fileName);
+            ObjectInputStream o = new ObjectInputStream(f);
+            var game = (Game) o.readObject();
             o.close();
             f.close();
             return game;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

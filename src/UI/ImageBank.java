@@ -18,11 +18,13 @@ public class ImageBank {
 
     private void LoadImages(String subFolder, List<String> names) throws IOException {
         this.images = new HashMap<>();
-        for (int i=0;i< names.size(); i++) {
-            var name = names.get(i);
+        for (String name : names) {
             var path = "Images/" + subFolder + "/" + name + ".jpg";
             InputStream imageStream = getClass().getResourceAsStream(path);
-            BufferedImage image = ImageIO.read(imageStream);
+            BufferedImage image = null;
+            if (imageStream != null) {
+                image = ImageIO.read(imageStream);
+            }
             this.images.put(name, image);
         }
     }

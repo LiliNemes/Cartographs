@@ -1,7 +1,10 @@
 package UI;
 
 import Engine.Builder.GameFactory;
-import Engine.Model.*;
+import Engine.Model.Game;
+import Engine.Model.ScoreBoard;
+import Engine.Model.Seasons;
+import Engine.Model.ValidationResult;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,60 +17,62 @@ import java.util.Map;
 
 public class GameFrame extends JFrame implements UserOkEventListener {
 
-    private ImageBank tileImages;
-    private ImageBank cardImages;
-    private ImageBank otherImages;
-
+    private static final Map<ValidationResult, String> validationMessages = Map.of(
+            ValidationResult.TileNotEmpty, "Tile is not empty",
+            ValidationResult.InvalidTerrain, "Invalid tile type",
+            ValidationResult.NoSelection, "Must select some tiles",
+            ValidationResult.InvalidArrangement, "Invalid shape of selected tiles",
+            ValidationResult.MustPutOnRuin, "Shape must contain a ruin",
+            ValidationResult.OnlySingleReplacement, "As you cannot place your shape properly, you can only place a single tile"
+    );
+    private final ImageBank tileImages;
+    private final ImageBank cardImages;
+    private boolean random;
     private JBoard board;
     private JPanel scoreArea;
     private JScoreBlock block1;
     private JScoreBlock block2;
     private JScoreBlock block3;
     private JScoreBlock block4;
-
     private JPanel mainPanel;
     private JPanel rightPanel;
     private JPanel discoveryPanel;
-
     private JPanel scoreCardPanel;
     private JLabel infoLabel;
-
     private JLabel goldLabel;
-
     private IGameEngine currentGame;
-
     private ScoreBoard scoreBoard;
+    private JMenuBar menuBar;
 
-    public GameFrame(String title, ImageBank tileImages, ImageBank cardImages, ImageBank otherImages) throws HeadlessException {
+    public GameFrame(String title, ImageBank tileImages, ImageBank cardImages) throws HeadlessException {
         super(title);
         this.tileImages = tileImages;
         this.cardImages = cardImages;
-        this.otherImages = otherImages;
+        this.random = false;
         this.initScoreBoard();
         this.initFrame();
     }
 
     private void initScoreBoard() {
-        var filePath = Paths.get("").toAbsolutePath().toString() + "/scores.bin";
+        var filePath = Paths.get("").toAbsolutePath() + "/scores.bin";
         System.out.println(filePath);
         var f = new File(filePath);
         if (f.exists()) {
             this.scoreBoard = ScoreBoard.load(filePath);
-        }
-        else {
+        } else {
             this.scoreBoard = new ScoreBoard();
         }
     }
 
     private void saveScoreBoard() {
-        var filePath = Paths.get("").toAbsolutePath().toString() + "/scores.bin";
+        var filePath = Paths.get("").toAbsolutePath() + "/scores.bin";
         System.out.println(filePath);
         this.scoreBoard.save(filePath);
     }
 
-    private void startGame(boolean isHardLevel) {
+    private void startGame(boolean isHardLevel, boolean random) {
         String name = JOptionPane.showInputDialog(this, "Enter your name");
-        this.currentGame = GameFactory.Instance.createSolitaireGame(name, isHardLevel);
+        this.currentGame = GameFactory.Instance.createSolitaireGame(name, isHardLevel, random);
         this.board.setBoardInfo(this.currentGame);
         this.showScoreCards();
         this.drawCard();
@@ -78,15 +83,14 @@ public class GameFrame extends JFrame implements UserOkEventListener {
     }
 
     private void showCurrentSeason() {
-        String info = String.format("Season: %s, Time:%s", this.currentGame.getCurrentSeason().name(), this.currentGame.getCurrentTime());
+        String info = String.format("Season: %s, Actual time:%s, Season time:%s", this.currentGame.getCurrentSeason().name(), this.currentGame.getCurrentTime(), this.currentGame.getCurrentSeasonTime());
         String name;
-        if(this.currentGame.getPlayerName()==null) {
-            name= "null";
+        if (this.currentGame.getPlayerName() == null) {
+            name = "null";
+        } else {
+            name = this.currentGame.getPlayerName();
         }
-        else {
-            name=this.currentGame.getPlayerName();
-        }
-        this.infoLabel.setText(info + " Player: " + name);
+        this.infoLabel.setText(info + "  Player: " + name);
     }
 
     private void showGold() {
@@ -109,18 +113,16 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.scoreArea.revalidate();
         this.scoreArea.repaint();
     }
-    private void showScores(int id, int a, int b, int gold, int monster) {
-        if(id==0) {
-            block1.setScores(a, b,  gold, monster);
-        }
-        if(id==1) {
-            block2.setScores(a, b, gold, monster);
-        }
-        if(id==2) {
-            block3.setScores(a, b, gold, monster);
-        }
-        if(id==3) {
-            block4.setScores(a, b, gold, monster);
+
+    private void showScores(int id, int[] scores) {
+        if (id == 0) {
+            block1.setScores(scores[0], scores[1], scores[2], scores[3]);
+        } else if (id == 1) {
+            block2.setScores(scores[0], scores[1], scores[2], scores[3]);
+        } else if (id == 2) {
+            block3.setScores(scores[0], scores[1], scores[2], scores[3]);
+        } else if (id == 3) {
+            block4.setScores(scores[0], scores[1], scores[2], scores[3]);
         }
 
         this.scoreArea.revalidate();
@@ -132,9 +134,16 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         double scale = 0.6;
 
         var scoreCards = this.currentGame.getDrawnScoreCards();
-        for (int i=0; i<scoreCards.size(); i++) {
+        for (int i = 0; i < scoreCards.size(); i++) {
             var drawnCard = new JCard(this.cardImages, scale);
-            drawnCard.setCardType(scoreCards.get(i).getName(), scoreCards.get(i).getDescription());
+            boolean active = false;
+            switch (this.currentGame.getCurrentSeason()) {
+                case spring -> active = i < 2;
+                case summer -> active = i > 0 && i < 3;
+                case autumn -> active = i > 1;
+                case winter -> active = i == 0 || i == 3;
+            }
+            drawnCard.setCardType(scoreCards.get(i).getName(), scoreCards.get(i).getDescription(), active);
             this.scoreCardPanel.add(drawnCard);
         }
 
@@ -151,13 +160,13 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         int cardWidth = card.getPreferredSize().width;
         int cardHeight = card.getPreferredSize().height;
         this.discoveryPanel.add(card);
-        card.setBounds(new Rectangle(topX,topY, cardWidth, cardHeight));
+        card.setBounds(new Rectangle(topX, topY, cardWidth, cardHeight));
 
         var discoveryCards = this.currentGame.getDrawnDiscoveryCards();
-        for (int i=0; i<discoveryCards.size(); i++) {
+        for (int i = 0; i < discoveryCards.size(); i++) {
             var drawnCard = new JCard(this.cardImages);
-            drawnCard.setCardType(discoveryCards.get(i), null);
-            drawnCard.setBounds(new Rectangle(topX  + cardWidth + 20 + (int)(i * cardWidth*0.4),topY, cardWidth, cardHeight));
+            drawnCard.setCardType(discoveryCards.get(i), null, false);
+            drawnCard.setBounds(new Rectangle(topX + cardWidth + 20 + (int) (i * cardWidth * 0.4), topY, cardWidth, cardHeight));
             this.discoveryPanel.add(drawnCard);
             drawnCard.getParent().setComponentZOrder(drawnCard, 0);
         }
@@ -177,6 +186,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
 
     private void initFrame() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setResizable(false);
         setLayout(new BorderLayout());
 
         this.mainPanel = new JPanel();
@@ -194,7 +204,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
 
         this.goldLabel = new JLabel();
         this.goldLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-        this.goldLabel.setBorder(new EmptyBorder(4,10,4,0));
+        this.goldLabel.setBorder(new EmptyBorder(4, 10, 4, 0));
         scoreBorderPanel.add(this.goldLabel, BorderLayout.NORTH);
 
         this.mainPanel.add(this.board, BorderLayout.CENTER);
@@ -208,7 +218,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.rightPanel.setLayout(new BorderLayout());
         this.infoLabel = new JLabel();
         this.infoLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-        this.infoLabel.setBorder(new EmptyBorder(4,10,4,0));
+        this.infoLabel.setBorder(new EmptyBorder(4, 10, 4, 0));
         this.rightPanel.add(this.infoLabel, BorderLayout.NORTH);
 
         this.discoveryPanel = new JPanel();
@@ -224,48 +234,54 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.setJMenuBar(this.menuBar);
     }
 
-    private JMenuBar menuBar;
-
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         var menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         menuBar.add(menu);
 
-        var startMenuItem = new JMenuItem("Start", KeyEvent.VK_S);
+        var startMenuItem = new JMenuItem("Start new game", KeyEvent.VK_N);
         startMenuItem.addActionListener(e -> {
             if (this.currentGame != null) {
                 int result = JOptionPane.showConfirmDialog(this, "The current game will be lost. Are you sure?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (result == JOptionPane.NO_OPTION) return;
             }
-            this.startGame(false);
+            this.startGame(false, this.random);
         });
 
-        var startHardMenuItem = new JMenuItem("Start Hard");
+        var startHardMenuItem = new JMenuItem("Start new hard game", KeyEvent.VK_H);
         startHardMenuItem.addActionListener(e -> {
             if (this.currentGame != null) {
                 int result = JOptionPane.showConfirmDialog(this, "The current game will be lost. Are you sure?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (result == JOptionPane.NO_OPTION) return;
             }
-            this.startGame(true);
+            this.startGame(true, this.random);
         });
 
-        var loadMenuItem = new JMenuItem("Load game");
-        loadMenuItem.addActionListener(e -> {
-            this.loadGame();
+        var randomMenuItem = new JMenuItem("Random", KeyEvent.VK_R);
+        randomMenuItem.addActionListener(e ->{
+            String msg = "";
+            if(this.random) {
+                this.random = false;
+                msg = "off";
+            }
+            else {
+                this.random = true;
+                msg = "on";
+            }
+            JOptionPane.showMessageDialog(this, "You have successfully turned "+msg+" the randomness in the game!");
         });
 
-        var saveMenuItem = new JMenuItem("Save game");
-        saveMenuItem.addActionListener(e -> {
-            this.saveGame();
-        });
+        var loadMenuItem = new JMenuItem("Load game", KeyEvent.VK_L);
+        loadMenuItem.addActionListener(e -> this.loadGame());
 
-        var scoreboardMenuItem = new JMenuItem("View scoreboard");
-        scoreboardMenuItem.addActionListener(e -> {
-            showScoreBoard();
-        });
+        var saveMenuItem = new JMenuItem("Save game", KeyEvent.VK_S);
+        saveMenuItem.addActionListener(e -> this.saveGame());
 
-        var exitMenuItem = new JMenuItem("Exit");
+        var scoreboardMenuItem = new JMenuItem("View scoreboard", KeyEvent.VK_B);
+        scoreboardMenuItem.addActionListener(e -> showScoreBoard());
+
+        var exitMenuItem = new JMenuItem("Exit", KeyEvent.VK_X);
         exitMenuItem.addActionListener(e -> {
             if (this.currentGame != null) {
                 int result = JOptionPane.showConfirmDialog(this, "The current game will be lost. Are you sure?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -276,6 +292,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
 
         menu.add(startMenuItem);
         menu.add(startHardMenuItem);
+        menu.add(randomMenuItem);
         menu.add(loadMenuItem);
         menu.add(saveMenuItem);
         menu.add(scoreboardMenuItem);
@@ -289,13 +306,11 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         dialog.setLocationRelativeTo(this);
         dialog.setLayout(new BorderLayout());
         var closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> {
-            dialog.dispose();
-        });
+        closeButton.addActionListener(e -> dialog.dispose());
         dialog.add(closeButton, BorderLayout.SOUTH);
 
         var scores = this.scoreBoard.getScoresArray();
-        var table = new JTable(scores, new String[] {"Name", "Score"});
+        var table = new JTable(scores, new String[]{"Name", "Score"});
         table.setEnabled(false);
         JScrollPane sp = new JScrollPane(table);
 
@@ -329,6 +344,16 @@ public class GameFrame extends JFrame implements UserOkEventListener {
             this.showDiscoveryCards();
             this.showCurrentSeason();
             this.createScores();
+            for (Seasons s : Seasons.values()) {
+                int id = -1;
+                switch (s) {
+                    case spring -> id = 0;
+                    case summer -> id = 1;
+                    case autumn -> id = 2;
+                    case winter -> id = 3;
+                }
+                this.showScores(id, this.currentGame.getSeasonScores(s));
+            }
             this.showGold();
         }
     }
@@ -346,48 +371,41 @@ public class GameFrame extends JFrame implements UserOkEventListener {
                 filePath += ".cartg";
             }
             System.out.println(filePath);
-            GameFactory.Instance.saveGame(filePath, (Game)this.currentGame);
+            GameFactory.Instance.saveGame(filePath, (Game) this.currentGame);
         }
     }
-
-    private static Map<ValidationResult, String> validationMessages = Map.of(
-            ValidationResult.TileNotEmpty, "Tile is not empty",
-            ValidationResult.InvalidTerrain, "Invalid tile type",
-            ValidationResult.NoSelection, "Must select some tiles",
-            ValidationResult.InvalidArrangement, "Invalid shape of selected tiles",
-            ValidationResult.MustPutOnRuin, "Shape must contain a ruin",
-            ValidationResult.OnlySingleReplacement, "As you cannot place your shape properly, you can only place a single tile"
-            );
 
     @Override
     public void userOkEventOccurred(UserOkEvent event) {
         var sel = event.getPlayerTilesSelection();
         var validationResult = this.currentGame.executePlayerSelection(sel);
         if (validationResult.getVr() != ValidationResult.Ok) {
-            String message = validationMessages.containsKey(validationResult.getVr()) ?
-                    validationMessages.get(validationResult.getVr()) : "Invalid selection of tiles! Please try again!";
+            String message = validationMessages.getOrDefault(validationResult.getVr(), "Invalid selection of tiles! Please try again!");
             JOptionPane.showMessageDialog(this, message);
         }
-        if(validationResult.isEndOfSeason()) {
+        if (validationResult.isEndOfSeason()) {
             String endOfSeasonMessage = "End of season! Accumulated points can be seen below.";
-            if(validationResult.getSeason()== Seasons.spring) {
-                showScores(0, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), validationResult.getMonster());
+            if (validationResult.getSeason() == Seasons.spring) {
+                showScores(0, this.currentGame.getSeasonScores(validationResult.getSeason()));
                 JOptionPane.showMessageDialog(this, endOfSeasonMessage);
                 this.currentGame.setCurrentSeason(Seasons.summer);
+                showScoreCards();
             }
-            if(validationResult.getSeason()== Seasons.summer) {
-                showScores(1, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), validationResult.getMonster());
+            if (validationResult.getSeason() == Seasons.summer) {
+                showScores(1, this.currentGame.getSeasonScores(validationResult.getSeason()));
                 JOptionPane.showMessageDialog(this, endOfSeasonMessage);
                 this.currentGame.setCurrentSeason(Seasons.autumn);
+                showScoreCards();
             }
-            if(validationResult.getSeason()== Seasons.autumn) {
-                showScores(2, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), validationResult.getMonster());
+            if (validationResult.getSeason() == Seasons.autumn) {
+                showScores(2, this.currentGame.getSeasonScores(validationResult.getSeason()));
                 JOptionPane.showMessageDialog(this, endOfSeasonMessage);
                 this.currentGame.setCurrentSeason(Seasons.winter);
+                showScoreCards();
             }
-            if(validationResult.getSeason()== Seasons.winter) {
-                showScores(3, validationResult.getA(), validationResult.getB(), validationResult.getMoney(), validationResult.getMonster());
-                int finalScore=block1.getTotal()+block2.getTotal()+block3.getTotal()+block4.getTotal();
+            if (validationResult.getSeason() == Seasons.winter) {
+                showScores(3, this.currentGame.getSeasonScores(validationResult.getSeason()));
+                int finalScore = this.currentGame.getFinalScore();
                 JOptionPane.showMessageDialog(this, "End of the game! Your final score is " + finalScore + ". You can start a new one in the main menu.");
                 this.scoreBoard.addScore(this.currentGame.getPlayerName(), finalScore);
                 this.saveScoreBoard();
@@ -395,7 +413,7 @@ public class GameFrame extends JFrame implements UserOkEventListener {
                 this.currentGame = null;
             }
         }
-        if(validationResult.getVr() == ValidationResult.Ok && !(validationResult.isEndOfSeason() && validationResult.getSeason()==Seasons.winter)) {
+        if (validationResult.getVr() == ValidationResult.Ok && !(validationResult.isEndOfSeason() && validationResult.getSeason() == Seasons.winter)) {
             this.drawCard();
             this.showCurrentSeason();
             this.showDiscoveryCards();

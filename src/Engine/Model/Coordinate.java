@@ -8,8 +8,8 @@ import java.util.List;
  * Koordináták. Ezek alapján különböztethetők meg a játéktábla mezői.
  */
 public class Coordinate implements Serializable {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     /**
      * Konstruktor, a jelölés a derékszögű koordinátarendszer jelölésének megfelelő. Későbbiekben mindig csak az első
@@ -40,14 +40,28 @@ public class Coordinate implements Serializable {
 
     /**
      * Megnézi, hogy egy koordináta értéke megegyezik-e az adott koordináta értékével.
-     * @param coordinate A másik koordináta.
+     *
+     * @param o A másik koordináta.
      * @return True ha megegyeznek, false ha nem.
      */
-    public boolean isEqualTo(Coordinate coordinate) {
-        return (coordinate.getX() == x && coordinate.getY() == y);
+    public boolean equals(Object o) {
+        if(o == this)
+            return true;
+
+        if(!(o instanceof Coordinate c))
+            return false;
+        else{
+            return (c.getX() == x && c.getY() == y);
+        }
     }
 
 
+    /**
+     * A koordinátát eltolja a paraéterként megadott értékekkel.
+     * @param x X koordináta eltolása.
+     * @param y Y koordináta eltolása.
+     * @return Az eltolt koordináta.
+     */
     public Coordinate offset(int x, int y) {
         return new Coordinate(this.x + x, this.y + y);
     }
@@ -59,8 +73,7 @@ public class Coordinate implements Serializable {
      */
     public static Coordinate parse(String inp) {
         String[] pair = inp.split(",");
-        Coordinate coordinate = new Coordinate(Integer.parseInt(pair[0]), Integer.parseInt(pair[1]));
-        return coordinate;
+        return new Coordinate(Integer.parseInt(pair[0]), Integer.parseInt(pair[1]));
     }
 
     /**
@@ -72,20 +85,29 @@ public class Coordinate implements Serializable {
     public static List<Coordinate> parseList(String inp) {
         List<Coordinate> result = new ArrayList<>();
         String[] split = inp.split(";");
-        for(int i=0; i< split.length; i++) {
-            result.add(Coordinate.parse(split[i]));
+        for (String s : split) {
+            result.add(Coordinate.parse(s));
         }
         return result;
     }
 
+    /**
+     * A paraméterként kapott, koordinátákat tartalmazó listából kiszedi a szintén paraméterként kapott koordinátákat
+     * tartalmazó lista elemeit.
+     * @param in A teljes lista.
+     * @param coordinatesToRemove Az eltávolítandó elemek.
+     * @return A "szűrt" lista.
+     */
     public static List<Coordinate> removeCoordinates(List<Coordinate> in, List<Coordinate> coordinatesToRemove) {
         List<Coordinate> result = new ArrayList<>();
 
-        for (int i=0; i<in.size(); i++) {
-            var coordinate = in.get(i);
+        for (Coordinate coordinate : in) {
             boolean hasMatch = false;
-            for (int j=0; j<coordinatesToRemove.size(); j++) {
-                if (coordinatesToRemove.get(j).isEqualTo(coordinate)) hasMatch = true;
+            for (Coordinate value : coordinatesToRemove) {
+                if (value.equals(coordinate)) {
+                    hasMatch = true;
+                    break;
+                }
             }
             if (!hasMatch)
                 result.add(coordinate);
@@ -94,14 +116,21 @@ public class Coordinate implements Serializable {
         return result;
     }
 
+    /**
+     * A paraméterként kapott, koordinátákat tartalmazó listából kiszedi a duplikált koordinátákat.
+     * @param in Az eredeti lista.
+     * @return A "szűrt" lista.
+     */
     public static List<Coordinate> removeDuplicates(List<Coordinate> in) {
         List<Coordinate> result = new ArrayList<>();
 
-        for (int i=0; i<in.size(); i++) {
-            var coordinate = in.get(i);
+        for (Coordinate coordinate : in) {
             boolean hasMatch = false;
-            for (int j=0; j<result.size(); j++) {
-                if (result.get(j).isEqualTo(coordinate)) hasMatch = true;
+            for (Coordinate value : result) {
+                if (value.equals(coordinate)) {
+                    hasMatch = true;
+                    break;
+                }
             }
             if (!hasMatch)
                 result.add(coordinate);

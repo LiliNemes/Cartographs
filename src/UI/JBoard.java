@@ -10,30 +10,27 @@ import java.util.List;
 
 public class JBoard extends JPanel {
 
-    private JTile[][] tiles;
-    private JPanel tilePanel;
-    private JPanel controlPanel;
-    private JPanel buttonPanel;
-    private JPanel selectorPanel;
-    private JButton clearButton;
-    private JButton okButton;
-    private ImageBank tileImages;
-
-    private TerrainType userTerrainType;
-
-    private IBoardInfo boardInfo;
-
+    private final JPanel tilePanel;
+    private final JPanel controlPanel;
+    private final JPanel buttonPanel;
+    private final JPanel selectorPanel;
+    private final JButton clearButton;
+    private final JButton okButton;
+    private final ImageBank tileImages;
     protected EventListenerList listenerList = new EventListenerList();
+    private JTile[][] tiles;
+    private TerrainType userTerrainType;
+    private IBoardInfo boardInfo;
 
     public JBoard(ImageBank tileImages) {
 
         this.tileImages = tileImages;
 
         setMinimumSize(new Dimension(400, 400));
-        setMaximumSize(new Dimension(600,600));
+        setMaximumSize(new Dimension(600, 600));
 
         this.tilePanel = new JPanel();
-        this.tilePanel.setPreferredSize(new Dimension(300,300));
+        this.tilePanel.setPreferredSize(new Dimension(300, 300));
         this.setLayout(new BorderLayout());
         add(tilePanel, BorderLayout.CENTER);
 
@@ -50,19 +47,23 @@ public class JBoard extends JPanel {
         this.buttonPanel.setLayout(new BoxLayout(this.buttonPanel, BoxLayout.Y_AXIS));
 
         this.okButton = new JButton("Ok");
-        this.okButton.setMaximumSize(new Dimension(90,35));
+        this.okButton.setMaximumSize(new Dimension(90, 35));
         this.okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.okButton.setBackground(new Color(18,15,10));
+        this.okButton.setForeground(Color.white);
+        this.okButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.okButton.setFocusPainted(false);
         this.clearButton = new JButton("Clear");
-        this.clearButton.setMaximumSize(new Dimension(90,35));
+        this.clearButton.setMaximumSize(new Dimension(90, 35));
         this.clearButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.clearButton.setBackground(new Color(18,15,10));
+        this.clearButton.setForeground(Color.white);
+        this.clearButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.clearButton.setFocusPainted(false);
 
-        this.clearButton.addActionListener(e -> {
-            this.clearUserSelection();
-        });
+        this.clearButton.addActionListener(e -> this.clearUserSelection());
 
-        this.okButton.addActionListener(e -> {
-            this.completeUserSelection();
-        });
+        this.okButton.addActionListener(e -> this.completeUserSelection());
 
         this.buttonPanel.add(clearButton);
         this.buttonPanel.add(Box.createVerticalStrut(10));
@@ -78,15 +79,12 @@ public class JBoard extends JPanel {
     public void addUserOkEventListener(UserOkEventListener listener) {
         listenerList.add(UserOkEventListener.class, listener);
     }
-    public void removeUserOkEventListener(UserOkEventListener listener) {
-        listenerList.remove(UserOkEventListener.class, listener);
-    }
 
     private void fireUserOkEvent(UserOkEvent evt) {
         Object[] listeners = listenerList.getListenerList();
-        for (int i = 0; i < listeners.length; i = i+2) {
+        for (int i = 0; i < listeners.length; i = i + 2) {
             if (listeners[i] == UserOkEventListener.class) {
-                ((UserOkEventListener) listeners[i+1]).userOkEventOccurred(evt);
+                ((UserOkEventListener) listeners[i + 1]).userOkEventOccurred(evt);
             }
         }
     }
@@ -94,17 +92,18 @@ public class JBoard extends JPanel {
     public void setPossibleTerrainTypes(List<TerrainType> terrainTypes) {
         setUserTerrainType(terrainTypes.get(0));
         this.selectorPanel.removeAll();
-        for(int i=0;i<terrainTypes.size();i++) {
-            var terrainType = terrainTypes.get(i);
+        for (TerrainType terrainType : terrainTypes) {
             var button = new JButton(terrainType.name());
             var image = this.tileImages.getByName(terrainType.name().toLowerCase());
-            var scaledImage = image.getScaledInstance(20,20, Image.SCALE_SMOOTH);
+            var scaledImage = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             button.setIcon(new ImageIcon(scaledImage));
+            button.setBackground(new Color(18,15,10));
+            button.setForeground(Color.white);
+            button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            button.setFocusPainted(false);
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
             button.setMaximumSize(new Dimension(100, 40));
-            button.addActionListener(e -> {
-                this.setUserTerrainType(terrainType);
-            });
+            button.addActionListener(e -> this.setUserTerrainType(terrainType));
             this.selectorPanel.add(Box.createVerticalStrut(5));
             this.selectorPanel.add(button);
         }
@@ -112,16 +111,16 @@ public class JBoard extends JPanel {
 
     private void setUserTerrainType(TerrainType terrainType) {
         this.userTerrainType = terrainType;
-        for (int row=0;row<tiles.length;row++) {
-            for (int col=0;col<tiles.length;col++) {
+        for (int row = 0; row < tiles.length; row++) {
+            for (int col = 0; col < tiles.length; col++) {
                 tiles[col][row].setUserTerrainType(terrainType);
             }
         }
     }
 
     private void clearUserSelection() {
-        for (int row=0;row<tiles.length;row++) {
-            for (int col=0;col<tiles.length;col++) {
+        for (int row = 0; row < tiles.length; row++) {
+            for (int col = 0; col < tiles.length; col++) {
                 tiles[col][row].clearSelection();
             }
         }
@@ -129,8 +128,8 @@ public class JBoard extends JPanel {
 
     private void completeUserSelection() {
         PlayerTilesSelection selection = new PlayerTilesSelection();
-        for (int row=0;row<tiles.length;row++) {
-            for (int col=0;col<tiles.length;col++) {
+        for (int row = 0; row < tiles.length; row++) {
+            for (int col = 0; col < tiles.length; col++) {
                 if (tiles[col][row].isSelected()) {
                     selection.addTile(col, row, this.userTerrainType);
                 }
@@ -142,8 +141,8 @@ public class JBoard extends JPanel {
     public void refreshBoard(boolean isMonsterMode) {
         this.selectorPanel.revalidate();
         this.selectorPanel.repaint();
-        for (int row=0;row<boardInfo.getSize();row++) {
-            for (int col=0;col<boardInfo.getSize();col++) {
+        for (int row = 0; row < boardInfo.getSize(); row++) {
+            for (int col = 0; col < boardInfo.getSize(); col++) {
                 var tileInfo = boardInfo.getTileInfo(col, row);
                 tiles[col][row].setOriginalData(tileInfo.getTerrainType(), tileInfo.hasRuins(), isMonsterMode);
             }
@@ -165,9 +164,9 @@ public class JBoard extends JPanel {
 
     public void setMonsterSelection(PlayerTilesSelection monsterSelection) {
         var selectedTiles = monsterSelection.getSelectedTiles();
-        for (int i=0; i<selectedTiles.size(); i++) {
-            var x = selectedTiles.get(i).getX();
-            var y = selectedTiles.get(i).getY();
+        for (Engine.Model.SelectedTile selectedTile : selectedTiles) {
+            var x = selectedTile.getX();
+            var y = selectedTile.getY();
             tiles[x][y].setMonster();
         }
     }
@@ -179,8 +178,8 @@ public class JBoard extends JPanel {
         tilePanel.setLayout(new GridLayout(boardSize, boardSize, 2, 2));
         tilePanel.setBackground(Color.BLACK);
         tiles = new JTile[boardSize][boardSize];
-        for (int row=0;row<boardInfo.getSize();row++) {
-            for (int col=0;col<boardInfo.getSize();col++) {
+        for (int row = 0; row < boardInfo.getSize(); row++) {
+            for (int col = 0; col < boardInfo.getSize(); col++) {
                 JTile tile = new JTile(this.tileImages);
                 var tileInfo = boardInfo.getTileInfo(col, row);
                 tile.setOriginalData(tileInfo.getTerrainType(), tileInfo.hasRuins(), false);

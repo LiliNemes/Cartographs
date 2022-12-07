@@ -4,8 +4,8 @@ package Engine.Model;
  * Visszaadja, hogy sikeres-e egy execution (ValidationResult), illetve ha igen akkor hány aranyat eredményez.
  */
 public class ExecutionResult {
-    private ValidationResult result;
-    private int goldYield;
+    private final ValidationResult result;
+    private final int goldYield;
 
     /**
      * Konstruktor.
@@ -39,8 +39,6 @@ public class ExecutionResult {
      * @return True ha egyenlőek, false ha nem.
      */
     public boolean Equals(ExecutionResult other){
-        if(other.getGoldYield()==goldYield && other.getResult()==result)
-            return true;
-        return false;
+        return other.getGoldYield() == goldYield && other.getResult() == result;
     }
 }

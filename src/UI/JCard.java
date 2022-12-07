@@ -4,24 +4,26 @@ import javax.swing.*;
 import java.awt.*;
 
 public class JCard extends JPanel {
-    private ImageBank cardImages;
+    private final ImageBank cardImages;
     private String cardType;
 
     public JCard(ImageBank cardImages) {
-        this (cardImages, 0.8);
+        this(cardImages, 0.8);
     }
 
     public JCard(ImageBank cardImages, double scale) {
         super(true);
-        this.setPreferredSize(new Dimension((int)(248*scale), (int)(349*scale)));
+        this.setPreferredSize(new Dimension((int) (248 * scale), (int) (349 * scale)));
         this.cardImages = cardImages;
         this.cardType = "discovery_back";
     }
 
-    public void setCardType(String cardType, String tooltip) {
+    public void setCardType(String cardType, String tooltip, boolean active) {
         this.cardType = cardType;
         String tooltipHtml = tooltip != null ? "<html>" + tooltip.replaceAll("(\r\n|\n)", "<br />") + "</html>" : null;
         this.setToolTipText(tooltipHtml);
+        if (active) this.setBorder(BorderFactory.createMatteBorder(7, 7, 7, 7, Color.BLACK));
+        else this.setBorder(BorderFactory.createEmptyBorder());
         this.revalidate();
         this.repaint();
     }
@@ -29,7 +31,7 @@ public class JCard extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D gCopy = (Graphics2D)g.create();
+        Graphics2D gCopy = (Graphics2D) g.create();
         String imageName = this.cardType.toLowerCase();
         g.drawImage(cardImages.getByName(imageName), 0, 0, this.getWidth(), this.getHeight(), null);
         gCopy.dispose();

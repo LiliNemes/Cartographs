@@ -1,4 +1,3 @@
-import Engine.Model.ScoreBoard;
 import UI.GameFrame;
 import UI.ImageBank;
 
@@ -55,9 +54,8 @@ public class Main {
                 "goblinattack",
                 "gnollraid",
                 "bugbearassault"));
-        ImageBank otherImages = new ImageBank("", List.of( "scoreBlock"));
 
-        GameFrame frame = new GameFrame("Cartographers", tileImages, cardImages, otherImages);
+        GameFrame frame = new GameFrame("Cartographers", tileImages, cardImages);
         SwingUtilities.invokeLater(() -> {
             frame.setMinimumSize(new Dimension(1400, 800));
             frame.setPreferredSize(new Dimension(1400, 800));

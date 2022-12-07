@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class Sc_CanalLakeTest {
     Sc_CanalLake canallake;
     Board board;
@@ -17,10 +15,9 @@ public class Sc_CanalLakeTest {
 
     /**
      * CanalLake küldetéskártya teszt ha van pont.
-     * @throws Exception Ha rossz kitöltés.
      */
     @Test
-    public void canalLakeTest1() throws Exception{
+    public void canalLakeTest1() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 1, TerrainType.Farm);
         ps.addTile(0, 0, TerrainType.Water);
@@ -34,10 +31,9 @@ public class Sc_CanalLakeTest {
 
     /**
      * CanalLake küldetéskártya teszt ha nincs pont.
-     * @throws Exception Ha rossz kitöltés.
      */
     @Test
-    public void canalLakeTest2() throws Exception{
+    public void canalLakeTest2() {
         PlayerTilesSelection ps=new PlayerTilesSelection();
         ps.addTile(0, 0, TerrainType.Water);
         ps.addTile(0, 2, TerrainType.Water);
