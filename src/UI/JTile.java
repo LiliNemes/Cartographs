@@ -5,6 +5,11 @@ import Engine.Model.TerrainType;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Tábla mezőinek UI osztálya, speciális típusú gombok. Fontos megjegyzés: Az originalTerrainType jelenti a mező valódi,
+ * beállított, ellenőrzött típusát, és a UserTerrainType azt, amit a felhasználó kijelöl egy adott lépésben (vagy monster
+ * esetén a gép) a mező típusának, de még nincs validálva, véglegesítve.
+ */
 public class JTile extends JButton {
 
     private final ImageBank tileImages;
@@ -15,6 +20,11 @@ public class JTile extends JButton {
     private TerrainType userTerrainType;
     private boolean isSelected;
 
+    /**
+     * Konstruktor. Beállítja az alapértelmezett (üres) kitöltést, hogy a mező épp nincs kiválasztva, a méretet
+     * illetve az action listenert.
+     * @param tileImages Képek amiket felvehet a mező (kitöltések).
+     */
     public JTile(ImageBank tileImages) {
         super();
         this.setDoubleBuffered(true);
@@ -26,14 +36,23 @@ public class JTile extends JButton {
         this.addActionListener(a -> this.toggleTile());
     }
 
+    /**
+     * Ha már kitöltött a mező akkor nem történik semmi, ha még nem, akkor az isSelected értéke megváltozik: ha eddig
+     * ki volt jelölve akkor nem lesz, ha nem volt akkor ki lesz.
+     */
     private void toggleTile() {
-        //cannot click on non-empty field
         if (this.originalTerrainType != TerrainType.Empty || isMonsterMode) return;
         this.isSelected = !this.isSelected;
         this.revalidate();
         this.repaint();
     }
 
+    /**
+     * Beállítja a mező OriginalTerrainType-ját illetve, hogy van-e rajta rom.
+     * @param terrainType A beállítandó kitöltés.
+     * @param hasRuin Van-e rajta rom.
+     * @param isMonsterMode Éppen szörnymező lerakásról va-e szó.
+     */
     public void setOriginalData(TerrainType terrainType, boolean hasRuin, boolean isMonsterMode) {
 
         this.isMonsterMode = isMonsterMode;
@@ -46,6 +65,9 @@ public class JTile extends JButton {
         this.repaint();
     }
 
+    /** Beállítja a UserTerrainType-ot: Ha a mező ki van jelölve akkor látszik a beállított kitöltéstípus.
+     * @param terrainType A megadott kitöltéstípus.
+     */
     public void setUserTerrainType(TerrainType terrainType) {
         this.userTerrainType = terrainType;
         if (isSelected) {
@@ -54,6 +76,9 @@ public class JTile extends JButton {
         }
     }
 
+    /**
+     * Ha ki van választva a mező akkor nem kiválasztottá válik.
+     */
     public void clearSelection() {
         if (isSelected) {
             isSelected = false;
@@ -62,6 +87,9 @@ public class JTile extends JButton {
         }
     }
 
+    /**
+     * Beállítja a mező user kitöltését Monsterre.
+     */
     public void setMonster() {
         this.isSelected = true;
         this.userTerrainType = TerrainType.Monster;
@@ -69,10 +97,20 @@ public class JTile extends JButton {
         this.repaint();
     }
 
+    /**
+     *
+     * @return ki van-e választva.
+     */
     public boolean isSelected() {
         return this.isSelected;
     }
 
+    /**
+     * Ha a mező ki van választva éppen, akkor megrajzolja annak kitöltését renderelés segítségével -> így a kiválasztott
+     * mező kitöltése áttetszőbb, szürkébb lesz a pályán már fixen elhelyezett mezőkéénél. Amennyiben a mező nincs
+     * kiválasztva akkor megrajzolja simán a kitöltését renderelés nélkül.
+     * @param g the <code>Graphics</code> object to protect
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -88,6 +126,14 @@ public class JTile extends JButton {
         gCopy.dispose();
     }
 
+    /**
+     * Kirajzolja a mező kitöltését. Ha a kitöltés típusaRift csak simán fekete lesz, ha TerrainType akkor az adott
+     * TerrainType-nak megfelelő kép, ha van rajta rom is akkor az a kép ami az adott TerrainTypehoz tartozik (az a neve)
+     * de ruin van a kép nevének végén.
+     * @param g Graphics 2d
+     * @param terrainType A mező kitöltése.
+     * @param hasRuin Van-e rajta rom.
+     */
     private void drawTerrainType(Graphics2D g, TerrainType terrainType, boolean hasRuin) {
 
         if (terrainType == TerrainType.Rift) {

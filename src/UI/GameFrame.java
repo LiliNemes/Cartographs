@@ -125,15 +125,14 @@ public class GameFrame extends JFrame implements UserOkEventListener {
 
     private void showScores(int id, int[] scores) {
         if (id == 0) {
-            block1.setScores(scores[0], scores[1], scores[2], scores[3]);
+            block1.setScores(scores[0], scores[1], scores[2], scores[3], "A", "B");
         } else if (id == 1) {
-            block2.setScores(scores[0], scores[1], scores[2], scores[3]);
+            block2.setScores(scores[0], scores[1], scores[2], scores[3], "B", "C");
         } else if (id == 2) {
-            block3.setScores(scores[0], scores[1], scores[2], scores[3]);
+            block3.setScores(scores[0], scores[1], scores[2], scores[3], "C", "D");
         } else if (id == 3) {
-            block4.setScores(scores[0], scores[1], scores[2], scores[3]);
+            block4.setScores(scores[0], scores[1], scores[2], scores[3], "D", "A");
         }
-
         this.scoreArea.revalidate();
         this.scoreArea.repaint();
     }
