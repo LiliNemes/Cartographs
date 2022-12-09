@@ -8,6 +8,9 @@ import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Játékpálya UI.
+ */
 public class JBoard extends JPanel {
 
     private final JPanel tilePanel;
@@ -23,16 +26,22 @@ public class JBoard extends JPanel {
     private IBoardInfo boardInfo;
     private final Color bgColor = new Color(255,238,203);
 
+    /**
+     * Konstruktor.
+     * @param tileImages A tábla mezői álal felvehető kitöltések képei.
+     */
     public JBoard(ImageBank tileImages) {
 
         this.tileImages = tileImages;
 
+        //min, max méret
         setMinimumSize(new Dimension(400, 400));
         setMaximumSize(new Dimension(600, 600));
 
+        //Játékpálya panelje
         this.tilePanel = new JPanel();
         this.tilePanel.setPreferredSize(new Dimension(300, 300));
-        this.tilePanel.setBackground(bgColor);
+        this.tilePanel.setBackground (bgColor);
         this.setLayout(new BorderLayout());
         add(tilePanel, BorderLayout.CENTER);
 
@@ -42,15 +51,18 @@ public class JBoard extends JPanel {
         this.controlPanel.setBackground(bgColor);
         add(controlPanel, BorderLayout.WEST);
 
+        //Bal oldali panel ahol a választható tereptípusok gombjai vannak.
         this.selectorPanel = new JPanel();
         this.selectorPanel.setLayout(new BoxLayout(this.selectorPanel, BoxLayout.Y_AXIS));
         this.selectorPanel.setBackground(bgColor);
         this.controlPanel.add(this.selectorPanel, BorderLayout.CENTER);
 
+        //Bal alsó panel ahol az okés clear gombok vannak.
         this.buttonPanel = new JPanel();
         this.buttonPanel.setLayout(new BoxLayout(this.buttonPanel, BoxLayout.Y_AXIS));
         this.buttonPanel.setBackground(bgColor);
 
+        //OK gomb, Clear gomb
         this.okButton = new JButton("Ok");
         this.okButton.setMaximumSize(new Dimension(90, 35));
         this.okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -72,6 +84,7 @@ public class JBoard extends JPanel {
 
         this.okButton.addActionListener(e -> this.completeUserSelection());
 
+        //Gombok a ButtonPanelra
         this.buttonPanel.add(clearButton);
         this.buttonPanel.add(Box.createVerticalStrut(10));
         this.buttonPanel.add(okButton);
@@ -83,10 +96,19 @@ public class JBoard extends JPanel {
         this.controlPanel.add(this.buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Az event listenerek listájához adja a paraméterként kapott EventListenert.
+     * @param listener A listener amit a listához ad.
+     */
     public void addUserOkEventListener(UserOkEventListener listener) {
         listenerList.add(UserOkEventListener.class, listener);
     }
 
+    /**
+     * Akkor hívódik meg ez a függvény, mikor egy UserOkEvent bekövetkezik. Meghívja az EventListeneren a userOkEventOccured
+     * függvényt ami gondoskodik az ennek hatására végrehajtandó feladatokról.
+     * @param evt A paraméterként kapott UserOkEvent.
+     */
     private void fireUserOkEvent(UserOkEvent evt) {
         Object[] listeners = listenerList.getListenerList();
         for (int i = 0; i < listeners.length; i = i + 2) {
@@ -96,6 +118,12 @@ public class JBoard extends JPanel {
         }
     }
 
+    /**
+     * A paraméterként kapott lista első elemét beállítja az alapértelmezettnek. A lista minden elemére készít egy
+     * gombot a selector panel területére, melyet megnyomva a játékos által kiválasztott mezők ilyen típusú kitöltéssel
+     * rendelkeznek majd az eddigi, alapértelmezett helyett (a már kijelölt mezőkre és a még kijelölendőekre is).
+     * @param terrainTypes Lista (az adott felfedező kártya felhúzásának hatására) beállítható tereptípusokról.
+     */
     public void setPossibleTerrainTypes(List<TerrainType> terrainTypes) {
         setUserTerrainType(terrainTypes.get(0));
         this.selectorPanel.removeAll();
@@ -117,6 +145,11 @@ public class JBoard extends JPanel {
         }
     }
 
+    /**
+     * Beállítja azt az értéket, hogy milyen típusú kitöltést fog adni egy mezőnek ha kijelöléskor rákattint a játékos.
+     * Ezt beállítja minden egyes mezőnél (JTile) is.
+     * @param terrainType A beállítandó kitöltési érték.
+     */
     private void setUserTerrainType(TerrainType terrainType) {
         this.userTerrainType = terrainType;
         for (int row = 0; row < tiles.length; row++) {
@@ -126,6 +159,9 @@ public class JBoard extends JPanel {
         }
     }
 
+    /**
+     * Nullázza a felhasználó által kijelölt mezőket, törli róluk a kijelölést.
+     */
     private void clearUserSelection() {
         for (int row = 0; row < tiles.length; row++) {
             for (int col = 0; col < tiles.length; col++) {
@@ -134,6 +170,10 @@ public class JBoard extends JPanel {
         }
     }
 
+    /**
+     * A felhasználó által kijelölt mezőkből player selectiont készít, majd meghívja a fireUserOkEvent-et, mely a
+     * kijelölés elleőrzését, véglegesítését folytatja.
+     */
     private void completeUserSelection() {
         PlayerTilesSelection selection = new PlayerTilesSelection();
         for (int row = 0; row < tiles.length; row++) {
@@ -146,6 +186,13 @@ public class JBoard extends JPanel {
         fireUserOkEvent(new UserOkEvent(this, selection));
     }
 
+    /**
+     * Törli a selector panelen lévő TerrainType gombokat. Minden mezőre beállítja annak OriginalDatáját, törli a
+     * kijelöléseket. Attól függően változtatja a clear button láthatóságát, hogy a paraméterként kapott boolean true
+     * vagy false.
+     * @param isMonsterMode Ha false akkor nem szörnykártya került játékba, szükség van rá, ha true akkor szörnykártya
+     *                      húzódott, nem lehet használni.
+     */
     public void refreshBoard(boolean isMonsterMode) {
         this.selectorPanel.revalidate();
         this.selectorPanel.repaint();
@@ -158,6 +205,9 @@ public class JBoard extends JPanel {
         this.clearButton.setVisible(!isMonsterMode);
     }
 
+    /**
+     * Letörli a táblát, leszedi róla a különböző elemeket.
+     */
     public void closeBoard() {
         this.tilePanel.removeAll();
         this.selectorPanel.removeAll();
@@ -170,6 +220,10 @@ public class JBoard extends JPanel {
         this.selectorPanel.repaint();
     }
 
+    /**
+     * Minden, a paraméterként kapott playerTilesSelection mezőjének beállítja a kitöltésének a monster TerrainType-ot.
+     * @param monsterSelection
+     */
     public void setMonsterSelection(PlayerTilesSelection monsterSelection) {
         var selectedTiles = monsterSelection.getSelectedTiles();
         for (Engine.Model.SelectedTile selectedTile : selectedTiles) {
@@ -179,6 +233,10 @@ public class JBoard extends JPanel {
         }
     }
 
+    /**
+     * Ez a függvény hozza létre magát a játékpályát JTile-okból. Láthatóvá teszi az ok illetve clear gombokat.
+     * @param boardInfo Információk a tábláról.
+     */
     public void setBoardInfo(IBoardInfo boardInfo) {
         this.boardInfo = boardInfo;
         int boardSize = boardInfo.getSize();

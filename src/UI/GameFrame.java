@@ -404,6 +404,13 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         }
     }
 
+    /**
+     * Először elkéri az eventtől a játékos által kiválasztott mezőket. Ezekre meghívja a validációt, ha az sikertelen,
+     * akkor pop up windowba hibaüzenetet ír ki. Ha sikeres, akkor megnézi, hogy éppen vége van-e egy évszaknak. Ha nincs
+     * akkor kártyát húz, megy tovább a játék. Ha vége van, akkor gondoskodik a pontozásról, új évszak, aktuális score
+     * cardok beállításáról. Ha vége van a játéknak kiírja pop up windowként az összpontszámot, bezárja a játékpályát.
+     * @param event paraméterként kapott event.
+     */
     @Override
     public void userOkEventOccurred(UserOkEvent event) {
         var sel = event.getPlayerTilesSelection();
