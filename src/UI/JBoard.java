@@ -187,7 +187,7 @@ public class JBoard extends JPanel {
     }
 
     /**
-     * Törli a selector panelen lévő TerrainType gombokat. Minden mezőre beállítja annak OriginalDatáját, törli a
+     * Frissíti a selector panelen lévő TerrainType gombokat. Minden mezőre beállítja annak OriginalDatáját, törli a
      * kijelöléseket. Attól függően változtatja a clear button láthatóságát, hogy a paraméterként kapott boolean true
      * vagy false.
      * @param isMonsterMode Ha false akkor nem szörnykártya került játékba, szükség van rá, ha true akkor szörnykártya
@@ -222,7 +222,7 @@ public class JBoard extends JPanel {
 
     /**
      * Minden, a paraméterként kapott playerTilesSelection mezőjének beállítja a kitöltésének a monster TerrainType-ot.
-     * @param monsterSelection
+     * @param monsterSelection A paraméterként kapott PlayerTilesSelection.
      */
     public void setMonsterSelection(PlayerTilesSelection monsterSelection) {
         var selectedTiles = monsterSelection.getSelectedTiles();

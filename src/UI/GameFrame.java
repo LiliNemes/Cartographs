@@ -18,8 +18,12 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ * Egész játék UI.
+ */
 public class GameFrame extends JFrame implements UserOkEventListener {
 
+    //Különböző validáció során felmerülhető problémák hibaüzenetei.
     private static final Map<ValidationResult, String> validationMessages = Map.of(
             ValidationResult.TileNotEmpty, "Tile is not empty",
             ValidationResult.InvalidTerrain, "Invalid tile type",
@@ -46,9 +50,16 @@ public class GameFrame extends JFrame implements UserOkEventListener {
     private IGameEngine currentGame;
     private ScoreBoard scoreBoard;
     private JMenuBar menuBar;
-    private Font font;
     private Color bgColor = new Color(255,238,203);
 
+    /**
+     * Konstruktor.
+     * @param title A játék címe.
+     * @param tileImages A mezők kitöltéseinek képei.
+     * @param cardImages A krtyák képei.
+     * @throws HeadlessException Thrown when code that is dependent on a keyboard, display, or mouse is called in an
+     * environment that does not support a keyboard, display, or mouse.
+     */
     public GameFrame(String title, ImageBank tileImages, ImageBank cardImages) throws HeadlessException {
         super(title);
         this.tileImages = tileImages;
@@ -58,6 +69,9 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.initFrame();
     }
 
+    /**
+     * Ha létezik ScoreBoard akkor betölti azt a fileból, ha még nem akkor létrehoz egyet.
+     */
     private void initScoreBoard() {
         var filePath = Paths.get("").toAbsolutePath() + "/scores.bin";
         System.out.println(filePath);
@@ -69,12 +83,20 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         }
     }
 
+    /**
+     * Elmenti a ScoreBoardot a filejába.
+     */
     private void saveScoreBoard() {
         var filePath = Paths.get("").toAbsolutePath() + "/scores.bin";
         System.out.println(filePath);
         this.scoreBoard.save(filePath);
     }
 
+    /**
+     * A játékot inicializáló, előkészítő függvény.
+     * @param isHardLevel Advanced szintű-e a játék (mikor vannak szakadékok) vagy sem.
+     * @param random Random-e a pálya kialakítása vagy sem.
+     */
     private void startGame(boolean isHardLevel, boolean random) {
         String name = JOptionPane.showInputDialog(this, "Enter your name");
         this.currentGame = GameFactory.Instance.createSolitaireGame(name, isHardLevel, random);
@@ -91,6 +113,10 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.showGold();
     }
 
+    /**
+     * Egy JLabelbe kiírja a játékról a felhasználó számára hasznos információkat: aktuális évszak, mennyi idő telt el
+     * belőle, mennyi ideig tart összesen, játékos neve.
+     */
     private void showCurrentSeason() {
         String info = String.format("Season: %s, Actual time: %s, Season time: %s", this.currentGame.getCurrentSeason().name(), this.currentGame.getCurrentTime(), this.currentGame.getCurrentSeasonTime());
         String name;
@@ -102,11 +128,17 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.infoLabel.setText(info + "  Player: " + name);
     }
 
+    /**
+     * Egy Jlabelbe kiírja mennyi aranyat gyűjtött a játékos a játék folyamán.
+     */
     private void showGold() {
         int golds = this.currentGame.getGolds();
         this.goldLabel.setText(String.format("Gold: %s", golds));
     }
 
+    /**
+     * Létrehozza a játékban évszakonként elért pontok megjelenítésére szolgáló JScoreBlock-okat.
+     */
     private void createScores() {
         this.scoreArea.removeAll();
 
@@ -123,6 +155,11 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.scoreArea.repaint();
     }
 
+    /**
+     * Beállítja a JScoreBlockok értékeit a kapott paraméterek szerint.
+     * @param id Számérték ami megmutatja, hogy melyik évszaknak megfelelő JScoreBlock értékét kell beállítani.
+     * @param scores A különböző pontszerzési módokhoz tarrtozó szerzett pontok tömbje.
+     */
     private void showScores(int id, int[] scores) {
         if (id == 0) {
             block1.setScores(scores[0], scores[1], scores[2], scores[3], "A", "B");
@@ -137,6 +174,9 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.scoreArea.repaint();
     }
 
+    /**
+     * A scoreCardokat jeleníti meg a scoreCardPanelen. Minden évszakban az aktívak keretet kapnak.
+     */
     private void showScoreCards() {
         this.scoreCardPanel.removeAll();
         double scale = 0.6;
@@ -159,6 +199,10 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.scoreCardPanel.repaint();
     }
 
+    /**
+     * A discoveryPanelen megjeleníti a paklit amiből húz a játék, a pakli mellett megjeleníti az aktuális, kihúzott
+     * kártyá(ka)t. Amennyiben több van belőlük egymásra fektetve, eltolva helyezi el őket.
+     */
     private void showDiscoveryCards() {
         this.discoveryPanel.removeAll();
 
@@ -183,6 +227,10 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.discoveryPanel.repaint();
     }
 
+    /**
+     * Kártyahúzás. Amennyiben AmbushCard meghívja a megfelelő függvény, hogy állítsa be a lehelyezendő alakot. Beállítja
+     * a lehelyezhető terep típusoknak megfelelő gombokat, a játékpályát új lehelyezésre késszé teszi.
+     */
     private void drawCard() {
         var monsterSelection = this.currentGame.drawNextCard();
         this.board.setPossibleTerrainTypes(this.currentGame.getPossibleTerrainTypes());
@@ -192,6 +240,9 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         }
     }
 
+    /**
+     * A játék összerakása.
+     */
     private void initFrame() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -263,9 +314,13 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         this.setJMenuBar(this.menuBar);
     }
 
+    /**
+     * A menü létrehozása.
+     * @return A kész menü.
+     */
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        var menu = new JMenu("File");
+        var menu = new JMenu("Menu");
         menu.setMnemonic(KeyEvent.VK_F);
         menuBar.add(menu);
 
@@ -330,6 +385,9 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         return menuBar;
     }
 
+    /**
+     * A ranglista megjelenítése JDialog benne JTable formájában.
+     */
     private void showScoreBoard() {
         var dialog = new JDialog(this);
         dialog.setLocationRelativeTo(this);
@@ -351,6 +409,9 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         dialog.setVisible(true);
     }
 
+    /**
+     * Játék betöltése mentettek közül JFileChooser segítségével.
+     */
     private void loadGame() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Cartographers game file", "cartg"));
@@ -387,6 +448,9 @@ public class GameFrame extends JFrame implements UserOkEventListener {
         }
     }
 
+    /**
+     * Játék mentése JFileChooser segítségével.
+     */
     private void saveGame() {
         if (this.currentGame == null) return;
         JFileChooser fileChooser = new JFileChooser();
